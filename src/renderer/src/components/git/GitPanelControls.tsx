@@ -260,12 +260,13 @@ export function BranchHeader({
 }
 
 export function JourneyButton({ cwd, repoName }: { cwd: string; repoName: string }) {
+  const { t } = useTranslation()
   const openJourneyPanel = useSessionStore((s) => s.openJourneyPanel)
   return (
     <IconButton
       onClick={() => openJourneyPanel(cwd, repoName)}
       className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors flex-shrink-0"
-      tooltip="Journey"
+      tooltip={t('git.journey.tooltip')}
     >
       {/* Timeline/route icon */}
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

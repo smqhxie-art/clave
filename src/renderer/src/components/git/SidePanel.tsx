@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 import { useAgentStore } from '../../store/agent-store'
 import { useLocationStore } from '../../store/location-store'
@@ -24,6 +25,7 @@ function getParentPaths(fullPath: string): { path: string; name: string }[] {
 }
 
 export function SidePanel() {
+  const { t } = useTranslation()
   const focusedSessionId = useSessionStore((s) => s.focusedSessionId)
   const sessions = useSessionStore((s) => s.sessions)
   const sidePanelTab = useSessionStore((s) => s.sidePanelTab)
@@ -234,7 +236,7 @@ export function SidePanel() {
               <button
                 onClick={goBack}
                 className="w-6 h-6 flex items-center justify-center rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors"
-                title="Go back"
+                title={t('sidePanel.goBack')}
               >
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M7.5 2.5L4 6l3.5 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />

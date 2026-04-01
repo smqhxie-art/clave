@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 import { useFileTree, type FlatTreeNode } from '../../hooks/use-file-tree'
 import { FileTreeItem } from './FileTreeItem'
@@ -137,6 +138,7 @@ export function FileTree({ cwd, isCustom, onChangeFolder, onResetFolder, onNavig
   onResetFolder: () => void
   onNavigateToFolder: (absolutePath: string) => void
 }) {
+  const { t } = useTranslation()
   const focusedSessionId = useSessionStore((s) => s.focusedSessionId)
   const setPreviewFile = useSessionStore((s) => s.setPreviewFile)
   const addFileTab = useSessionStore((s) => s.addFileTab)
@@ -267,7 +269,7 @@ export function FileTree({ cwd, isCustom, onChangeFolder, onResetFolder, onNavig
           onClick: () => onNavigateToFolder(absPath)
         })
         items.push({
-          label: 'Journey',
+          label: t('fileTree.contextMenu.journey'),
           onClick: () => {
             const folderName = node.path.split('/').pop() ?? node.path
             useSessionStore.getState().openJourneyPanel(absPath, folderName)

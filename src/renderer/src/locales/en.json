@@ -340,6 +340,36 @@
       "restoreNested": "Restore nested repos",
       "nestedRepoCount_one": "{{count}} nested repo",
       "nestedRepoCount_other": "{{count}} nested repos"
+    },
+    "journey": {
+      "tooltip": "Journey",
+      "refresh": "Refresh",
+      "loading": "Loading journey...",
+      "fallbackMode": "Grouped by day (no push history available)",
+      "defaultPushTitle": "Changes",
+      "pushFallback": "Push",
+      "localSection": "Local ({{count}})",
+      "generatingDescription": "Generating description...",
+      "loadingFiles": "Loading files...",
+      "noFilesChanged": "No files changed",
+      "loadMore": "Load more...",
+      "noHistory": "No commit history",
+      "time": {
+        "justNow": "just now",
+        "minutesAgo": "{{minutes}}m ago",
+        "hoursAgo": "{{hours}}h ago",
+        "daysAgo": "{{days}}d ago",
+        "monthsAgo": "{{months}}mo ago",
+        "yearsAgo": "{{years}}y ago"
+      }
+    }
+  },
+  "sidePanel": {
+    "goBack": "Go back"
+  },
+  "fileTree": {
+    "contextMenu": {
+      "journey": "Journey"
     }
   },
   "history": {

@@ -339,6 +339,36 @@
       "dockNested": "停靠嵌套仓库",
       "restoreNested": "恢复嵌套仓库",
       "nestedRepoCount": "{{count}} 个嵌套仓库"
+    },
+    "journey": {
+      "tooltip": "历史旅程",
+      "refresh": "刷新",
+      "loading": "正在加载历史旅程…",
+      "fallbackMode": "按天分组（无推送历史记录）",
+      "defaultPushTitle": "变更",
+      "pushFallback": "推送",
+      "localSection": "本地（{{count}}）",
+      "generatingDescription": "正在生成描述…",
+      "loadingFiles": "正在加载文件…",
+      "noFilesChanged": "无文件变更",
+      "loadMore": "加载更多…",
+      "noHistory": "暂无提交历史",
+      "time": {
+        "justNow": "刚刚",
+        "minutesAgo": "{{minutes}}分钟前",
+        "hoursAgo": "{{hours}}小时前",
+        "daysAgo": "{{days}}天前",
+        "monthsAgo": "{{months}}个月前",
+        "yearsAgo": "{{years}}年前"
+      }
+    }
+  },
+  "sidePanel": {
+    "goBack": "返回"
+  },
+  "fileTree": {
+    "contextMenu": {
+      "journey": "历史旅程"
     }
   },
   "history": {

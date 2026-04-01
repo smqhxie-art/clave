@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSessionStore } from '../../store/session-store'
 import { useGitJourney } from '../../hooks/use-git-journey'
@@ -10,22 +11,22 @@ import { CloseIcon, fileActionButtonClass } from '../files/FileActionIcons'
 // Helpers
 // ---------------------------------------------------------------------------
 
-function relativeTime(isoDate: string): string {
+function relativeTime(isoDate: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
   const now = Date.now()
   const then = new Date(isoDate).getTime()
   const diff = now - then
   const seconds = Math.floor(diff / 1000)
-  if (seconds < 60) return 'just now'
+  if (seconds < 60) return t('git.journey.time.justNow')
   const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 60) return t('git.journey.time.minutesAgo', { minutes })
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return t('git.journey.time.hoursAgo', { hours })
   const days = Math.floor(hours / 24)
-  if (days < 30) return `${days}d ago`
+  if (days < 30) return t('git.journey.time.daysAgo', { days })
   const months = Math.floor(days / 30)
-  if (months < 12) return `${months}mo ago`
+  if (months < 12) return t('git.journey.time.monthsAgo', { months })
   const years = Math.floor(months / 12)
-  return `${years}y ago`
+  return t('git.journey.time.yearsAgo', { years })
 }
 
 function commitFileStatusColor(status: GitCommitFileStatus['status']): string {
@@ -158,6 +159,7 @@ function navItemKey(item: NavItem): string {
 // ---------------------------------------------------------------------------
 
 export function GitJourneyPanel() {
+  const { t } = useTranslation()
   const journeyPanel = useSessionStore((s) => s.journeyPanel)
   const closeJourneyPanel = useSessionStore((s) => s.closeJourneyPanel)
   const setDiffPreview = useSessionStore((s) => s.setDiffPreview)
@@ -237,7 +239,7 @@ export function GitJourneyPanel() {
       const messages = group.commits.map((c) => c.message)
       window.electronAPI.gitSummarizePush(journeyPanel.cwd, messages, `${group.commits.length} commit(s)`)
         .then((result) => setSummaries((prev) => ({ ...prev, [groupId]: result })))
-        .catch(() => setSummaries((prev) => ({ ...prev, [groupId]: { title: messages[0] || 'Changes', description: '' } })))
+        .catch(() => setSummaries((prev) => ({ ...prev, [groupId]: { title: messages[0] || t('git.journey.defaultPushTitle'), description: '' } })))
         .finally(() => setSummarizing((prev) => { const next = new Set(prev); next.delete(groupId); return next }))
     }
   }, [expandedPushIds, journeyPanel, data, summaries, summarizing])
@@ -431,7 +433,7 @@ export function GitJourneyPanel() {
             <button
               onClick={refresh}
               className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors"
-              title="Refresh"
+              title={t('git.journey.refresh')}
             >
               <ArrowPathIcon className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             </button>
@@ -445,7 +447,7 @@ export function GitJourneyPanel() {
         <div ref={contentRef} className="flex-1 overflow-y-auto min-h-0">
           {loading && !data ? (
             <div className="flex items-center justify-center py-12">
-              <span className="text-xs text-text-tertiary">Loading journey...</span>
+              <span className="text-xs text-text-tertiary">{t('git.journey.loading')}</span>
             </div>
           ) : error ? (
             <div className="px-4 py-3 text-xs text-red-400">{error}</div>
@@ -453,7 +455,7 @@ export function GitJourneyPanel() {
             <>
               {data.fallbackMode && (
                 <div className="px-4 py-1.5 bg-surface-50 text-[10px] text-text-tertiary border-b border-border-subtle/30">
-                  Grouped by day (no push history available)
+                  {t('git.journey.fallbackMode')}
                 </div>
               )}
 
@@ -479,13 +481,13 @@ export function GitJourneyPanel() {
                       {isLocal ? (
                         <div className="flex items-center justify-between gap-2 mb-1.5">
                           <span className="text-[10px] font-semibold uppercase tracking-wider text-green-400">
-                            Local ({group.commits.length})
+                            {t('git.journey.localSection', { count: group.commits.length })}
                           </span>
                         </div>
                       ) : (
                         <div className="flex items-center justify-between gap-2 mb-1.5">
                           <span className="text-xs text-text-primary truncate font-medium flex items-center gap-1.5">
-                            {summary?.title ?? group.commits[0]?.message.slice(0, 60) ?? 'Push'}
+                            {summary?.title ?? group.commits[0]?.message.slice(0, 60) ?? t('git.journey.pushFallback')}
                             {isSummarizing && (
                               <span className="w-1.5 h-1.5 rounded-full bg-accent/60 animate-pulse flex-shrink-0" />
                             )}
@@ -494,7 +496,7 @@ export function GitJourneyPanel() {
                             {group.commits[0]?.author && (
                               <span>{group.commits[0].author}</span>
                             )}
-                            <span>{relativeTime(group.pushedAt)}</span>
+                            <span>{relativeTime(group.pushedAt, t)}</span>
                           </span>
                         </div>
                       )}
@@ -532,7 +534,7 @@ export function GitJourneyPanel() {
                               {isSummarizing && (
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-1.5 h-1.5 rounded-full bg-accent/60 animate-pulse" />
-                                  <span className="text-[10px] text-text-tertiary">Generating description...</span>
+                                  <span className="text-[10px] text-text-tertiary">{t('git.journey.generatingDescription')}</span>
                                 </div>
                               )}
                               {!isSummarizing && summary?.description && (
@@ -566,15 +568,15 @@ export function GitJourneyPanel() {
                                     </span>
                                     <span className="text-text-primary truncate flex-1 text-left">{commit.message}</span>
                                     <span className="text-[10px] text-text-tertiary flex-shrink-0">
-                                      {relativeTime(commit.date)}
+                                      {relativeTime(commit.date, t)}
                                     </span>
                                   </div>
                                   {commitExpanded && (
                                     <div className="border-t border-border-subtle/50">
                                       {filesLoading ? (
-                                        <div className="pl-6 py-1.5 text-[10px] text-text-tertiary">Loading files...</div>
+                                        <div className="pl-6 py-1.5 text-[10px] text-text-tertiary">{t('git.journey.loadingFiles')}</div>
                                       ) : !files || files.length === 0 ? (
-                                        <div className="pl-6 py-1.5 text-[10px] text-text-tertiary">No files changed</div>
+                                        <div className="pl-6 py-1.5 text-[10px] text-text-tertiary">{t('git.journey.noFilesChanged')}</div>
                                       ) : (
                                         <div className="py-0.5">
                                           {files.map((file) => {
@@ -612,13 +614,13 @@ export function GitJourneyPanel() {
                   className="w-full py-2 text-[10px] text-text-tertiary hover:text-text-secondary transition-colors"
                   onClick={loadMore}
                 >
-                  Load more...
+                  {t('git.journey.loadMore')}
                 </button>
               )}
 
               {allGroups.length === 0 && (
                 <div className="flex items-center justify-center py-12">
-                  <span className="text-xs text-text-tertiary">No commit history</span>
+                  <span className="text-xs text-text-tertiary">{t('git.journey.noHistory')}</span>
                 </div>
               )}
             </>
