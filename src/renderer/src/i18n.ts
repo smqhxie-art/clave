@@ -8,7 +8,7 @@ const resources = {
   'zh-CN': { translation: zhCN }
 }
 
-const savedLang = localStorage.getItem('clave-language') || 'en'
+const savedLang = localStorage.getItem('clave-language') || 'zh-CN'
 
 i18n.use(initReactI18next).init({
   resources,

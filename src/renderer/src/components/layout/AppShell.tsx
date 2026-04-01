@@ -8,6 +8,7 @@ import { TaskQueue } from '../board/KanbanBoard'
 import { UsagePanel } from '../usage/UsagePanel'
 import { SettingsPanel } from '../settings/SettingsPanel'
 import { UpdateOverlay } from '../ui/UpdateOverlay'
+import { LanguageWelcome } from '../ui/LanguageWelcome'
 import { AgentChatPanel } from '../agents/AgentChatPanel'
 import { HistoryPanel } from '../history/HistoryPanel'
 import { useLaunchTemplate } from '../../hooks/use-launch-template'
@@ -551,6 +552,7 @@ export function AppShell() {
       <GitDiffPreview />
       <GitJourneyPanel />
       <UpdateOverlay />
+      <LanguageWelcome />
     </div>
   )
 }
