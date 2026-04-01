@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ArrowPathIcon, ClockIcon, PlayIcon } from '@heroicons/react/24/outline'
+import { useTranslation } from 'react-i18next'
 import { cn } from '../../lib/utils'
 import { useHistoryStore } from '../../store/history-store'
 import { useSessionStore } from '../../store/session-store'
 
-function formatTimestamp(value: string): string {
+function formatTimestamp(value: string, unknownLabel: string): string {
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Unknown time'
+  if (Number.isNaN(date.getTime())) return unknownLabel
   return date.toLocaleString()
 }
 
@@ -46,6 +47,7 @@ function ToolMessageContent({
   content: string
   renderedContent: ReactNode
 }) {
+  const { t } = useTranslation()
   const contentRef = useRef<HTMLDivElement | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [isOverflowing, setIsOverflowing] = useState(false)
@@ -83,7 +85,7 @@ function ToolMessageContent({
           onClick={() => setExpanded((value) => !value)}
           className="mt-2 text-xs font-medium text-text-tertiary hover:text-text-primary transition-colors"
         >
-          {expanded ? '收起' : '展开'}
+          {expanded ? t('history.toolContent.collapse') : t('history.toolContent.expand')}
         </button>
       )}
     </div>
@@ -91,6 +93,7 @@ function ToolMessageContent({
 }
 
 export function HistoryPanel() {
+  const { t } = useTranslation()
   const selectedSession = useHistoryStore((s) => s.selectedSession)
   const messages = useHistoryStore((s) => s.messages)
   const isLoadingMessages = useHistoryStore((s) => s.isLoadingMessages)
@@ -155,7 +158,7 @@ export function HistoryPanel() {
   if (!selectedSession) {
     return (
       <div className="flex-1 flex items-center justify-center text-sm text-text-tertiary">
-        Select a Claude history session to view its conversation.
+        {t('history.panel.selectSessionHint')}
       </div>
     )
   }
@@ -165,7 +168,7 @@ export function HistoryPanel() {
       <div className="flex flex-wrap items-start justify-between gap-4 px-6 py-4 border-b border-border bg-surface-100/80">
         <div className="min-w-0 flex-1 basis-0">
           <div className="text-xs uppercase tracking-[0.18em] text-text-tertiary mb-1">
-            历史对话
+            {t('history.panel.heading')}
           </div>
           <h2 className="text-lg font-semibold text-text-primary truncate">
             {selectedSession.title}
@@ -187,7 +190,7 @@ export function HistoryPanel() {
             className="h-9 px-3 rounded-lg border border-border text-sm text-text-secondary hover:text-text-primary hover:bg-surface-200 transition-colors inline-flex items-center gap-2"
           >
             <ArrowPathIcon className="w-4 h-4" />
-            刷新
+            {t('history.panel.refresh')}
           </button>
           <button
             type="button"
@@ -195,24 +198,24 @@ export function HistoryPanel() {
             className="h-9 px-3 rounded-lg bg-accent text-accent-foreground text-sm font-medium hover:opacity-90 transition-opacity inline-flex items-center gap-2"
           >
             <PlayIcon className="w-4 h-4" />
-            恢复会话
+            {t('history.panel.restoreSession')}
           </button>
         </div>
       </div>
 
       <div className="px-6 py-3 border-b border-border bg-surface-50/80 text-xs text-text-tertiary flex items-center gap-5">
-        <span>{selectedSession.messageCount} messages</span>
+        <span>{t('history.panel.messageCount', { count: selectedSession.messageCount })}</span>
         <span className="inline-flex items-center gap-1.5">
           <ClockIcon className="w-3.5 h-3.5" />
-          Last updated {formatTimestamp(selectedSession.lastModified)}
+          {t('history.panel.lastUpdated', { time: formatTimestamp(selectedSession.lastModified, t('history.time.unknown')) })}
         </span>
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto px-6 py-5 space-y-3">
         {isLoadingMessages ? (
-          <div className="text-sm text-text-tertiary">Loading session messages...</div>
+          <div className="text-sm text-text-tertiary">{t('history.panel.loadingMessages')}</div>
         ) : sortedMessages.length === 0 ? (
-          <div className="text-sm text-text-tertiary">No visible messages in this session.</div>
+          <div className="text-sm text-text-tertiary">{t('history.panel.noMessages')}</div>
         ) : (
           sortedMessages.map((message) => (
             <div
@@ -231,7 +234,7 @@ export function HistoryPanel() {
                   {message.role}
                 </span>
                 <span className="text-xs text-text-tertiary">
-                  {formatTimestamp(message.timestamp)}
+                  {formatTimestamp(message.timestamp, t('history.time.unknown'))}
                 </span>
               </div>
               {message.role === 'tool' ? (

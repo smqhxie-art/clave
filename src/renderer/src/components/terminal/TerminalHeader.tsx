@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ArrowTopRightOnSquareIcon, PlayIcon, ArrowDownTrayIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import { useSessionStore } from '../../store/session-store'
 import { cn } from '../../lib/utils'
@@ -9,6 +10,7 @@ interface TerminalHeaderProps {
 }
 
 export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
+  const { t } = useTranslation()
   const session = useSessionStore((s) => s.sessions.find((sess) => sess.id === sessionId))
   const removeSession = useSessionStore((s) => s.removeSession)
   const setSessionServerStatus = useSessionStore((s) => s.setSessionServerStatus)
@@ -74,9 +76,9 @@ export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
                   serverStatus === 'starting' && 'text-amber-400 cursor-wait'
                 )}
                 title={
-                  serverStatus === 'running' ? `Open ${session.detectedUrl}` :
-                  serverStatus === 'stopped' ? `Restart server (${session.serverCommand})` :
-                  'Starting server…'
+                  serverStatus === 'running' ? t('terminal.header.server.tooltip.open', { url: session.detectedUrl }) :
+                  serverStatus === 'stopped' ? t('terminal.header.server.tooltip.restart', { command: session.serverCommand }) :
+                  t('terminal.header.server.tooltip.starting')
                 }
               >
                 {/* Status dot */}
@@ -104,7 +106,7 @@ export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
                 <button
                   onClick={handleServerStop}
                   className="p-0.5 rounded text-text-tertiary hover:text-red-400 hover:bg-red-400/10 transition-colors"
-                  title="Stop server (Ctrl+C)"
+                  title={t('terminal.header.server.tooltip.stop')}
                 >
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor" />
@@ -121,7 +123,7 @@ export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
               <button
                 onClick={() => window.electronAPI.saveDiscussion(session.cwd, session.claudeSessionId!, session.name)}
                 className="p-1 rounded hover:bg-surface-300 text-text-tertiary hover:text-text-primary transition-colors"
-                title="Save discussion"
+                title={t('terminal.header.button.saveDiscussion')}
               >
                 <ArrowDownTrayIcon className="w-3.5 h-3.5" />
               </button>
@@ -129,7 +131,7 @@ export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
                 <button
                   onClick={() => window.electronAPI.savePlan(session.cwd, session.claudeSessionId!, session.name)}
                   className="p-1 rounded hover:bg-surface-300 text-text-tertiary hover:text-text-primary transition-colors"
-                  title="Save plan"
+                  title={t('terminal.header.button.savePlan')}
                 >
                   <DocumentTextIcon className="w-3.5 h-3.5" />
                 </button>
@@ -139,7 +141,7 @@ export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
           <button
             onClick={() => setShowConfirm(true)}
             className="p-1 rounded hover:bg-surface-300 text-text-tertiary hover:text-text-primary transition-colors"
-            title="Kill session"
+            title={t('terminal.header.button.killSession')}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path
@@ -155,8 +157,8 @@ export function TerminalHeader({ sessionId }: TerminalHeaderProps) {
 
       <ConfirmDialog
         isOpen={showConfirm}
-        title="Delete session"
-        message="Are you sure you want to delete this session? This will terminate the process."
+        title={t('terminal.header.confirm.delete.title')}
+        message={t('terminal.header.confirm.delete.message')}
         onConfirm={handleKill}
         onCancel={() => setShowConfirm(false)}
       />

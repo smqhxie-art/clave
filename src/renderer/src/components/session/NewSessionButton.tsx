@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 
 export function NewSessionButton() {
+  const { t } = useTranslation()
   const addSession = useSessionStore((s) => s.addSession)
   const [loading, setLoading] = useState(false)
 
@@ -45,7 +47,7 @@ export function NewSessionButton() {
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
         <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
-      {loading ? 'Starting...' : 'New Session'}
+      {loading ? t('sidebar.newSessionButton.starting') : t('sidebar.newSessionButton.label')}
     </button>
   )
 }

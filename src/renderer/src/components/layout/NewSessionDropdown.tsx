@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAgentStore } from '../../store/agent-store'
 import { useLocationStore } from '../../store/location-store'
 import {
@@ -36,6 +37,7 @@ interface NewSessionDropdownProps {
 }
 
 export function NewSessionDropdown({ onNewSession, loading }: NewSessionDropdownProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [agentPickerOpen, setAgentPickerOpen] = useState(false)
   const btnRef = { current: null as HTMLButtonElement | null }
@@ -64,7 +66,7 @@ export function NewSessionDropdown({ onNewSession, loading }: NewSessionDropdown
             ref={(el) => { btnRef.current = el }}
             disabled={loading}
             className="w-5 h-5 flex items-center justify-center rounded-md hover:bg-surface-200 text-text-tertiary hover:text-text-primary transition-colors flex-shrink-0 disabled:opacity-50"
-            title="New session"
+            title={t('sidebar.newSession.tooltip')}
           >
             <PlusIcon className="w-3.5 h-3.5" />
           </button>
@@ -72,22 +74,22 @@ export function NewSessionDropdown({ onNewSession, loading }: NewSessionDropdown
 
         <DropdownMenuContent align="start">
           {hasRemoteLocations && (
-            <DropdownMenuLabel>This Mac</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('sidebar.newSession.localLabel')}</DropdownMenuLabel>
           )}
 
           <DropdownMenuItem onSelect={() => handleOption(false, false)}>
             <CommandLineIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-            <span className="flex-1">Terminal</span>
+            <span className="flex-1">{t('sidebar.newSession.terminal')}</span>
             <DropdownMenuShortcut>{'\u2318T'}</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => handleOption(true, false)}>
             <ClaudeLogo className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-            <span className="flex-1">Claude Code</span>
+            <span className="flex-1">{t('sidebar.newSession.claudeCode')}</span>
             <DropdownMenuShortcut>{'\u2318N'}</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => handleOption(true, true)}>
             <ShieldExclamationIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-            <span className="flex-1">Claude Code (skip permissions)</span>
+            <span className="flex-1">{t('sidebar.newSession.claudeCodeSkipPermissions')}</span>
             <DropdownMenuShortcut>{'\u2318D'}</DropdownMenuShortcut>
           </DropdownMenuItem>
 
@@ -105,11 +107,11 @@ export function NewSessionDropdown({ onNewSession, loading }: NewSessionDropdown
               </DropdownMenuLabel>
               <DropdownMenuItem onSelect={() => handleOption(false, false, loc.id)}>
                 <CommandLineIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-                <span className="flex-1">Terminal</span>
+                <span className="flex-1">{t('sidebar.newSession.remoteTerminal')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => handleOption(true, false, loc.id)}>
                 <ClaudeLogo className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-                <span className="flex-1">Claude Code</span>
+                <span className="flex-1">{t('sidebar.newSession.remoteClaudeCode')}</span>
               </DropdownMenuItem>
             </div>
           ))}
@@ -122,7 +124,7 @@ export function NewSessionDropdown({ onNewSession, loading }: NewSessionDropdown
                 setAgentPickerOpen(true)
               }}>
                 <BoltIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-                <span className="flex-1">OpenClaw Agent...</span>
+                <span className="flex-1">{t('sidebar.newSession.openClawAgent')}</span>
               </DropdownMenuItem>
             </>
           )}

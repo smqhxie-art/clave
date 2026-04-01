@@ -1,0 +1,686 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "close": "关闭",
+    "edit": "编辑",
+    "rename": "重命名",
+    "duplicate": "复制",
+    "export": "导出",
+    "open": "打开",
+    "add": "添加",
+    "remove": "移除",
+    "back": "返回",
+    "continue": "继续",
+    "done": "完成",
+    "retry": "重试",
+    "loading": "加载中...",
+    "loadingFiles": "正在加载文件...",
+    "refresh": "刷新"
+  },
+  "sidebar": {
+    "newSession": {
+      "tooltip": "新建会话",
+      "localLabel": "本机",
+      "terminal": "终端",
+      "claudeCode": "Claude Code",
+      "claudeCodeSkipPermissions": "Claude Code（跳过权限）",
+      "remoteTerminal": "终端",
+      "remoteClaudeCode": "Claude Code",
+      "openClawAgent": "OpenClaw Agent..."
+    },
+    "newSessionButton": {
+      "starting": "正在启动...",
+      "label": "新建会话"
+    },
+    "footer": {
+      "usage": "用量",
+      "settings": "设置"
+    },
+    "update": {
+      "available": "有可用更新",
+      "later": "稍后",
+      "update": "更新",
+      "fallbackLabel": "更新"
+    },
+    "sections": {
+      "queue": "队列",
+      "skipPermissionsBadge": "跳过",
+      "activeSessions": "当前活跃",
+      "workflows": "工作流",
+      "pinned": "已固定"
+    },
+    "toggle": {
+      "claudeCodeMode": "Claude Code 模式",
+      "terminalMode": "终端模式",
+      "skipPermissionsOn": "跳过权限 开启",
+      "skipPermissionsOff": "跳过权限 关闭"
+    },
+    "emptyState": {
+      "title": "暂无活跃会话",
+      "description": "打开项目文件夹以开始会话"
+    },
+    "contextMenu": {
+      "edit": "编辑",
+      "delete": "删除",
+      "rename": "重命名",
+      "hideFromSidebar": "从侧边栏隐藏",
+      "clearMessages": "清除消息",
+      "duplicate": "复制",
+      "group": "分组",
+      "resyncPin": "重新同步固定",
+      "pinGroup": "固定分组",
+      "addTerminal": "添加终端",
+      "ungroup": "取消分组",
+      "copyPath": "复制路径",
+      "revealInFinder": "在 Finder 中显示",
+      "close": "关闭",
+      "exportClave": "导出为 .clave",
+      "removePin": "取消固定",
+      "renamePinned": "重命名"
+    },
+    "search": {
+      "placeholder": "搜索会话和 Claude 历史...",
+      "noResults": "没有匹配的会话"
+    },
+    "resetSessions": {
+      "tooltip": "重置会话"
+    },
+    "pinned": {
+      "renamePrompt": "重命名固定分组"
+    },
+    "dialog": {
+      "deleteSession": {
+        "title": "删除会话",
+        "message": "确定要删除此会话吗？这将终止该进程。"
+      },
+      "resetSessions": {
+        "title": "重置会话",
+        "messageWithTemplate": "关闭所有会话并加载「{{name}}」模板？",
+        "messageBlank": "关闭所有会话并重新开始？"
+      }
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "section": {
+      "profile": "个人资料",
+      "appearance": "外观",
+      "appIcon": "应用图标",
+      "launchTemplates": "启动模板",
+      "workspaces": "工作区"
+    },
+    "profile": {
+      "icon": "图标",
+      "color": "颜色"
+    },
+    "appearance": {
+      "language": "语言"
+    },
+    "language": {
+      "en": "English",
+      "zhCN": "简体中文"
+    },
+    "theme": {
+      "dark": "深色",
+      "light": "浅色",
+      "coffee": "咖啡"
+    },
+    "appIcon": {
+      "dark": "深色",
+      "light": "浅色",
+      "claude": "Claude"
+    },
+    "template": {
+      "blank": "空白",
+      "noSessions": "无会话",
+      "tooltip": {
+        "default": "默认模板",
+        "setAsDefault": "设为默认",
+        "unsetDefault": "取消默认",
+        "doubleClickRename": "双击重命名",
+        "delete": "删除模板"
+      },
+      "badge": {
+        "sessionsGroups": "{{sessionCount}} 个会话，{{groupCount}} 个分组",
+        "sessions": "{{sessionCount}} 个会话"
+      },
+      "placeholder": {
+        "name": "模板名称..."
+      },
+      "button": {
+        "save": "保存",
+        "saveLayout": "保存当前布局"
+      }
+    },
+    "workspaces": {
+      "description": "选择文件夹以发现 .clave 工作区文件。活跃的工作区会自动加载其分组为固定项。",
+      "error": {
+        "notFound": "此文件夹中未找到 .clave 文件。",
+        "alreadyRegistered": "工作区已注册。"
+      },
+      "discovery": {
+        "found": "找到 {{count}} 个工作区文件：",
+        "alreadyAdded": "（已添加）"
+      },
+      "button": {
+        "addSelected": "添加所选",
+        "cancel": "取消",
+        "add": "添加工作区"
+      }
+    }
+  },
+  "locations": {
+    "status": {
+      "connected": "已连接",
+      "disconnected": "已断开",
+      "connecting": "连接中...",
+      "error": "错误"
+    },
+    "badge": {
+      "local": "本地"
+    },
+    "tooltip": {
+      "disconnect": "断开连接",
+      "connect": "连接",
+      "remove": "移除位置"
+    },
+    "section": {
+      "title": "位置",
+      "description": "管理用于终端会话和代理的本地及远程机器。"
+    },
+    "button": {
+      "add": "添加位置"
+    }
+  },
+  "addLocation": {
+    "title": "添加远程位置",
+    "label": {
+      "name": "名称",
+      "host": "主机",
+      "port": "端口",
+      "username": "用户名",
+      "authMethod": "认证方式",
+      "privateKeyPath": "私钥路径",
+      "password": "密码"
+    },
+    "placeholder": {
+      "name": "我的 Mac Mini",
+      "host": "100.x.x.x 或主机名",
+      "username": "admin"
+    },
+    "authMethod": {
+      "key": "SSH 密钥",
+      "password": "密码",
+      "agent": "SSH Agent"
+    },
+    "status": {
+      "testing": "正在测试连接...",
+      "success": "连接成功！",
+      "openclawDetected": "检测到 {{version}}（端口 {{port}}）",
+      "openclawNotFound": "未检测到 OpenClaw",
+      "failed": "连接失败",
+      "promptTest": "点击下方按钮测试连接",
+      "installFailed": "安装失败"
+    },
+    "button": {
+      "installing": "正在安装...",
+      "installPlugin": "安装 Clave Channel 插件",
+      "cancel": "取消",
+      "back": "返回",
+      "testConnection": "测试连接",
+      "continue": "继续",
+      "done": "完成"
+    },
+    "option": {
+      "autoConnect": "应用启动时自动连接"
+    }
+  },
+  "git": {
+    "discard": {
+      "confirmSingleFile": "丢弃对 {{name}} 的更改？此操作不可撤销。",
+      "confirmMultipleFiles": "丢弃 {{count}} 个文件的所有更改？此操作不可撤销。",
+      "dialogTitle": "丢弃更改"
+    },
+    "status": {
+      "noChangesInFolder": "此文件夹无更改",
+      "workingTreeClean": "工作区干净",
+      "filteredTo": "筛选至：{{prefix}}",
+      "focusSessionHint": "请聚焦一个会话以查看 Git 状态",
+      "loading": "加载中...",
+      "notARepo": "不是 Git 仓库"
+    },
+    "section": {
+      "staged": "已暂存",
+      "modified": "已修改",
+      "untracked": "未跟踪"
+    },
+    "action": {
+      "unstageAll": "全部取消暂存",
+      "stageAll": "全部暂存",
+      "discardAll": "全部丢弃"
+    },
+    "pull": {
+      "tooltip": "拉取远程更改",
+      "button": "↓ 拉取",
+      "optionsTooltip": "拉取选项",
+      "strategy": {
+        "auto": "拉取",
+        "merge": "拉取（合并）",
+        "rebase": "拉取（变基）",
+        "ffOnly": "拉取（仅快进）"
+      }
+    },
+    "push": {
+      "tooltip": "推送到远程",
+      "button": "↑ 推送"
+    },
+    "commit": {
+      "placeholder": "提交信息...",
+      "placeholderGenerating": "正在生成提交信息...",
+      "generateTooltip": "生成提交信息",
+      "button": "提交"
+    },
+    "controls": {
+      "collapseAll": {
+        "tooltip": "全部折叠"
+      },
+      "viewMode": {
+        "listTooltip": "列表视图",
+        "treeTooltip": "树形视图"
+      },
+      "panelMode": {
+        "changesTooltip": "更改",
+        "logTooltip": "提交日志"
+      }
+    },
+    "sync": {
+      "step": {
+        "pulling": "拉取中",
+        "staging": "暂存中",
+        "generating": "生成信息中",
+        "committing": "提交中",
+        "pushing": "推送中"
+      },
+      "result": {
+        "synced": "{{count}} 已同步",
+        "clean": "{{count}} 无变化",
+        "failed": "{{count}} 失败",
+        "syncFailed": "同步失败"
+      },
+      "syncing": "同步中...",
+      "magicSyncTooltip": "智能同步"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{{minutes}} 分钟前",
+      "hoursAgo": "{{hours}} 小时前",
+      "daysAgo": "{{days}} 天前",
+      "monthsAgo": "{{months}} 个月前",
+      "yearsAgo": "{{years}} 年前"
+    },
+    "log": {
+      "loadingFiles": "正在加载文件...",
+      "noFilesChanged": "没有文件变更",
+      "loadingHistory": "正在加载历史...",
+      "section": {
+        "outgoing": "待推送",
+        "incoming": "待拉取",
+        "history": "历史"
+      },
+      "action": {
+        "push": "↑ 推送",
+        "pull": "↓ 拉取"
+      },
+      "noHistory": "无提交历史"
+    },
+    "multiRepo": {
+      "dockNested": "停靠嵌套仓库",
+      "restoreNested": "恢复嵌套仓库",
+      "nestedRepoCount": "{{count}} 个嵌套仓库"
+    }
+  },
+  "history": {
+    "time": {
+      "unknown": "未知时间"
+    },
+    "toolContent": {
+      "collapse": "收起",
+      "expand": "展开"
+    },
+    "panel": {
+      "selectSessionHint": "选择一个 Claude 历史会话以查看对话内容。",
+      "heading": "历史对话",
+      "refresh": "刷新",
+      "restoreSession": "恢复会话",
+      "messageCount": "{{count}} 条消息",
+      "lastUpdated": "最后更新于 {{time}}",
+      "loadingMessages": "正在加载会话消息...",
+      "noMessages": "此会话中没有可见消息。"
+    },
+    "sidebar": {
+      "heading": {
+        "search": "对话",
+        "default": "历史对话"
+      },
+      "refreshTooltip": "刷新 Claude 历史",
+      "searchingFor": "正在搜索 Claude 历史记录「{{query}}」",
+      "searching": "正在搜索消息...",
+      "noSearchResults": "没有匹配的对话文本。",
+      "loading": {
+        "title": "正在加载 Claude Code 历史对话",
+        "description": "首次打开会扫描本机的工作目录和 session，通常需要几秒钟，请稍等一下。"
+      },
+      "noHistoryFound": "此 Mac 上未找到 Claude 历史记录。"
+    },
+    "search": {
+      "roleFilter": {
+        "all": "全部",
+        "user": "用户",
+        "assistant": "助手"
+      }
+    },
+    "role": {
+      "user": "用户",
+      "assistant": "助手"
+    }
+  },
+  "board": {
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{{minutes}} 分钟前",
+      "hoursAgo": "{{hours}} 小时前",
+      "daysAgo": "{{days}} 天前"
+    },
+    "contextMenu": {
+      "edit": "编辑",
+      "delete": "删除"
+    },
+    "search": {
+      "placeholder": "按提示词或文件夹搜索任务..."
+    },
+    "button": {
+      "addTask": "添加任务",
+      "run": "运行"
+    },
+    "empty": {
+      "noTasks": "暂无任务",
+      "noTasksHint": "创建任务以排队稍后执行",
+      "noMatch": "没有匹配的任务",
+      "noMatchHint": "尝试其他搜索词"
+    },
+    "badge": {
+      "skipPerms": "跳过权限"
+    },
+    "tooltip": {
+      "runTask": "运行此任务"
+    }
+  },
+  "taskForm": {
+    "title": {
+      "edit": "编辑任务",
+      "new": "新建任务"
+    },
+    "label": {
+      "prompt": "提示词",
+      "folder": "文件夹",
+      "titleOptional": "标题（可选）"
+    },
+    "placeholder": {
+      "prompt": "Claude Code 指令...",
+      "folder": "选择文件夹...",
+      "title": "任务的简短标签"
+    },
+    "button": {
+      "browse": "浏览",
+      "cancel": "取消",
+      "save": "保存",
+      "create": "创建"
+    },
+    "option": {
+      "skipPermissions": "跳过权限"
+    },
+    "hint": {
+      "submit": "提交"
+    }
+  },
+  "agent": {
+    "chat": {
+      "emptyState": {
+        "noAgentSelected": "选择一个代理开始聊天",
+        "startConversation": "与 {{name}} 开始对话"
+      },
+      "input": {
+        "placeholder": "发送消息..."
+      },
+      "message": {
+        "error": {
+          "sendFailed": "发送失败"
+        }
+      }
+    },
+    "picker": {
+      "unknownLocation": "未知",
+      "emptyState": {
+        "noAgents": "已连接的位置没有代理。",
+        "connectHint": "在设置中连接一个位置。"
+      },
+      "button": {
+        "addAgent": "添加"
+      }
+    }
+  },
+  "terminal": {
+    "header": {
+      "server": {
+        "tooltip": {
+          "open": "打开 {{url}}",
+          "restart": "重启服务器（{{command}}）",
+          "starting": "正在启动服务器...",
+          "stop": "停止服务器（Ctrl+C）"
+        }
+      },
+      "button": {
+        "saveDiscussion": "保存讨论",
+        "savePlan": "保存计划",
+        "killSession": "终止会话"
+      },
+      "confirm": {
+        "delete": {
+          "title": "删除会话",
+          "message": "确定要删除此会话吗？这将终止该进程。"
+        }
+      }
+    },
+    "error": {
+      "loadFailed": "终端加载失败"
+    }
+  },
+  "confirmDialog": {
+    "defaultConfirmLabel": "删除",
+    "cancel": "取消"
+  },
+  "groupCommand": {
+    "title": {
+      "edit": "编辑终端",
+      "add": "添加终端"
+    },
+    "description": "为此分组配置终端。",
+    "folderPicker": {
+      "tooltip": "选择文件夹",
+      "placeholder": "选择文件夹...",
+      "change": "更改"
+    },
+    "commandInput": {
+      "placeholder": "例如 npm run dev（可选）"
+    },
+    "mode": {
+      "label": "模式：",
+      "prefill": "预填",
+      "autoExecute": "自动执行"
+    },
+    "icon": {
+      "label": "图标："
+    },
+    "color": {
+      "label": "颜色："
+    },
+    "delete": "删除",
+    "cancel": "取消",
+    "save": "保存"
+  },
+  "exportClave": {
+    "title": "导出为 .clave",
+    "description": "将此分组定义保存到文件。",
+    "folderPicker": {
+      "tooltip": "选择文件夹",
+      "loading": "加载中...",
+      "change": "更改"
+    },
+    "fileName": {
+      "placeholder": "文件名.clave"
+    },
+    "keepSynced": {
+      "label": "保持同步",
+      "description": "分组的更改将自动更新文件"
+    },
+    "cancel": "取消",
+    "export": "导出"
+  },
+  "updateOverlay": {
+    "downloading": {
+      "title": "正在更新至",
+      "fallbackVersion": "新版本",
+      "starting": "正在开始下载..."
+    },
+    "downloaded": {
+      "title": "正在重启...",
+      "fallbackLabel": "更新",
+      "subtitle": "已准备就绪"
+    },
+    "error": {
+      "title": "更新失败",
+      "fallbackMessage": "发生意外错误",
+      "back": "返回",
+      "retry": "重试"
+    },
+    "cancel": "取消"
+  },
+  "filePalette": {
+    "searchPlaceholder": {
+      "noSession": "请先聚焦一个会话",
+      "default": "搜索文件..."
+    },
+    "empty": {
+      "noSession": "请先聚焦一个会话",
+      "noResults": "未找到文件",
+      "noFiles": "目录中没有文件"
+    },
+    "loading": "正在加载文件...",
+    "truncationWarning": "文件列表已截断（超过 50,000 个文件）",
+    "hint": {
+      "insert": "插入",
+      "absolute": "绝对路径",
+      "copy": "复制",
+      "preview": "预览"
+    }
+  },
+  "remoteDirectoryPicker": {
+    "error": {
+      "readFailed": "读取目录失败"
+    },
+    "title": "选择目录",
+    "pathInput": {
+      "placeholder": "/路径/到/目录",
+      "go": "前往"
+    },
+    "loading": "加载中...",
+    "empty": "没有子目录",
+    "cancel": "取消",
+    "open": "打开"
+  },
+  "usagePanel": {
+    "error": {
+      "notAvailable": "Electron 外无法使用用量统计",
+      "loadFailed": "加载用量数据失败"
+    },
+    "loading": "正在加载用量数据...",
+    "retry": "重试",
+    "title": "用量",
+    "refresh": {
+      "tooltip": "刷新"
+    },
+    "statCards": {
+      "estimatedCost": {
+        "label": "预估费用"
+      },
+      "allTime": "总计",
+      "tokens": {
+        "label": "令牌"
+      },
+      "sessions": {
+        "label": "会话"
+      },
+      "total": "总计",
+      "messages": {
+        "label": "消息"
+      }
+    },
+    "activityChart": {
+      "title": "活动（最近 30 天）",
+      "messages": "消息"
+    },
+    "modelBreakdown": {
+      "title": "模型分布",
+      "tokens": "令牌"
+    },
+    "hourGrid": {
+      "title": "按小时活动",
+      "messages": "消息"
+    }
+  },
+  "menu": {
+    "app": {
+      "about": "关于 Clave",
+      "services": "服务",
+      "hide": "隐藏 Clave",
+      "hideOthers": "隐藏其他",
+      "showAll": "显示全部",
+      "quit": "退出 Clave"
+    },
+    "file": {
+      "label": "文件",
+      "newWindow": "新建窗口",
+      "closeWindow": "关闭窗口"
+    },
+    "edit": {
+      "label": "编辑",
+      "undo": "撤销",
+      "redo": "重做",
+      "cut": "剪切",
+      "copy": "复制",
+      "paste": "粘贴",
+      "selectAll": "全选"
+    },
+    "view": {
+      "label": "显示",
+      "reload": "重新加载",
+      "forceReload": "强制重新加载",
+      "toggleDevTools": "切换开发者工具",
+      "resetZoom": "实际大小",
+      "zoomIn": "放大",
+      "zoomOut": "缩小",
+      "toggleFullScreen": "切换全屏"
+    },
+    "window": {
+      "label": "窗口",
+      "minimize": "最小化",
+      "zoom": "缩放",
+      "front": "前置全部窗口"
+    },
+    "help": {
+      "label": "帮助"
+    }
+  }
+}

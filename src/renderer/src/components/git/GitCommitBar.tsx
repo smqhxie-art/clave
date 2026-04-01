@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ChevronDownIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import { IconButton } from '../ui/tooltip'
 import { useSessionStore } from '../../store/session-store'
@@ -13,6 +14,7 @@ export function PullButton({
   operating: boolean
   onOperation: (fn: () => Promise<void>) => void
 }) {
+  const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -45,16 +47,16 @@ export function PullButton({
           className="text-xs font-medium pl-2 pr-1 py-1 rounded-l bg-surface-100 text-text-secondary hover:text-text-primary disabled:opacity-40 transition-all"
           disabled={operating}
           onClick={() => handlePull('auto')}
-          tooltip="Pull remote changes"
+          tooltip={t('git.pull.tooltip')}
           side="top"
         >
-          {'\u2193'} Pull
+          {t('git.pull.button')}
         </IconButton>
         <IconButton
           className="text-xs py-1 pr-1.5 pl-0.5 rounded-r bg-surface-100 text-text-tertiary hover:text-text-primary disabled:opacity-40 transition-all border-l border-border-subtle"
           disabled={operating}
           onClick={() => setMenuOpen((v) => !v)}
-          tooltip="Pull options"
+          tooltip={t('git.pull.optionsTooltip')}
           side="top"
         >
           <ChevronDownIcon className="w-3 h-3" />
@@ -63,10 +65,10 @@ export function PullButton({
       {menuOpen && (
         <div className="absolute bottom-full right-0 mb-1 bg-surface-200 border border-border-subtle rounded shadow-lg py-0.5 z-50 min-w-[140px]">
           {([
-            ['auto', 'Pull'],
-            ['merge', 'Pull (Merge)'],
-            ['rebase', 'Pull (Rebase)'],
-            ['ff-only', 'Pull (FF only)']
+            ['auto', t('git.pull.strategy.auto')],
+            ['merge', t('git.pull.strategy.merge')],
+            ['rebase', t('git.pull.strategy.rebase')],
+            ['ff-only', t('git.pull.strategy.ffOnly')]
           ] as [PullStrategy, string][]).map(([strategy, label]) => (
             <button
               key={strategy}
@@ -101,6 +103,7 @@ export function CommitBar({
   operating: boolean
   onOperation: (fn: () => Promise<void>) => void
 }) {
+  const { t } = useTranslation()
   const commitMessage = useSessionStore((s) => s.commitMessages[cwd] ?? '')
   const generating = useSessionStore((s) => s.generatingCommitCwds.has(cwd))
   const [generateError, setGenerateError] = useState<string | null>(null)
@@ -162,7 +165,7 @@ export function CommitBar({
         <textarea
           className="w-full bg-surface-100 text-text-primary text-xs rounded px-2 py-1.5 pr-7 resize-none outline-none border border-transparent focus:border-accent placeholder:text-text-tertiary"
           rows={2}
-          placeholder={generating ? 'Generating commit message...' : 'Commit message...'}
+          placeholder={generating ? t('git.commit.placeholderGenerating') : t('git.commit.placeholder')}
           value={commitMessage}
           onChange={(e) => setCommitMessage(e.target.value as string)}
           onKeyDown={handleKeyDown}
@@ -172,7 +175,7 @@ export function CommitBar({
           className="absolute right-1.5 top-1.5 p-0.5 rounded text-text-tertiary hover:text-accent disabled:opacity-30 transition-colors"
           disabled={totalFileCount === 0 || generating || operating}
           onClick={handleGenerateMessage}
-          tooltip="Generate commit message"
+          tooltip={t('git.commit.generateTooltip')}
           side="top"
         >
           {generating ? (
@@ -196,17 +199,17 @@ export function CommitBar({
           disabled={operating || stagedCount === 0 || !commitMessage.trim()}
           onClick={handleCommit}
         >
-          Commit
+          {t('git.commit.button')}
         </button>
         {ahead > 0 && (
           <IconButton
             className="text-xs font-medium px-2 py-1 rounded bg-green-500/15 text-green-400 hover:bg-green-500/25 disabled:opacity-40 transition-all"
             disabled={operating}
             onClick={handlePush}
-            tooltip="Push to remote"
+            tooltip={t('git.push.tooltip')}
             side="top"
           >
-            {'\u2191'} Push
+            {t('git.push.button')}
           </IconButton>
         )}
         {behind > 0 && (

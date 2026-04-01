@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FolderIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 
 interface RemoteDirectoryPickerProps {
@@ -20,6 +21,7 @@ export function RemoteDirectoryPicker({
   onSelect,
   onCancel
 }: RemoteDirectoryPickerProps) {
+  const { t } = useTranslation()
   const [currentPath, setCurrentPath] = useState('')
   const [entries, setEntries] = useState<DirEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -66,7 +68,7 @@ export function RemoteDirectoryPicker({
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to read directory')
+          setError(err instanceof Error ? err.message : t('remoteDirectoryPicker.error.readFailed'))
           setLoading(false)
         }
       }
@@ -115,7 +117,7 @@ export function RemoteDirectoryPicker({
         {/* Header */}
         <div className="px-4 py-3 border-b border-border-subtle">
           <h3 className="text-sm font-semibold text-text-primary">
-            Choose directory on {locationName}
+            {t('remoteDirectoryPicker.title')} {locationName}
           </h3>
         </div>
 
@@ -130,13 +132,13 @@ export function RemoteDirectoryPicker({
                 if (e.key === 'Enter') handlePathSubmit()
               }}
               className="flex-1 h-7 px-2 rounded-lg bg-surface-0 border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary outline-none focus:ring-1 focus:ring-accent transition-colors font-mono"
-              placeholder="/path/to/directory"
+              placeholder={t('remoteDirectoryPicker.pathInput.placeholder')}
             />
             <button
               onClick={handlePathSubmit}
               className="h-7 px-2 rounded-lg text-xs text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors"
             >
-              Go
+              {t('remoteDirectoryPicker.pathInput.go')}
             </button>
           </div>
         </div>
@@ -166,7 +168,7 @@ export function RemoteDirectoryPicker({
         <div className="flex-1 overflow-y-auto min-h-0 px-2 py-1">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <span className="text-xs text-text-tertiary">Loading...</span>
+              <span className="text-xs text-text-tertiary">{t('remoteDirectoryPicker.loading')}</span>
             </div>
           ) : error ? (
             <div className="flex items-center justify-center py-8">
@@ -174,7 +176,7 @@ export function RemoteDirectoryPicker({
             </div>
           ) : entries.length === 0 ? (
             <div className="flex items-center justify-center py-8">
-              <span className="text-xs text-text-tertiary">No subdirectories</span>
+              <span className="text-xs text-text-tertiary">{t('remoteDirectoryPicker.empty')}</span>
             </div>
           ) : (
             <>
@@ -211,14 +213,14 @@ export function RemoteDirectoryPicker({
               onClick={onCancel}
               className="h-7 px-3 rounded-lg text-xs text-text-secondary hover:text-text-primary hover:bg-surface-200 transition-colors"
             >
-              Cancel
+              {t('remoteDirectoryPicker.cancel')}
             </button>
             <button
               onClick={() => onSelect(currentPath)}
               disabled={!currentPath}
               className="h-7 px-4 rounded-lg bg-accent text-white text-xs font-medium hover:bg-accent/90 transition-colors disabled:opacity-50"
             >
-              Open
+              {t('remoteDirectoryPicker.open')}
             </button>
           </div>
         </div>

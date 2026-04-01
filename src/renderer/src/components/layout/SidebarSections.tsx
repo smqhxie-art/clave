@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ChevronRightIcon, QueueListIcon } from '@heroicons/react/24/outline'
 import { useSessionStore } from '../../store/session-store'
 import { useBoardStore } from '../../store/board-store'
@@ -33,6 +34,7 @@ export function SectionHeading({
 }
 
 export function TaskQueueSection({ collapsed }: { collapsed: boolean }) {
+  const { t } = useTranslation()
   const activeView = useSessionStore((s) => s.activeView)
   const setActiveView = useSessionStore((s) => s.setActiveView)
   const tasks = useBoardStore((s) => s.tasks)
@@ -53,7 +55,7 @@ export function TaskQueueSection({ collapsed }: { collapsed: boolean }) {
             )}
           >
             <QueueListIcon className="flex-shrink-0 w-4 h-4 text-text-tertiary" />
-            <span className="truncate">Queue</span>
+            <span className="truncate">{t('sidebar.sections.queue')}</span>
             {tasks.length > 0 && (
               <span className="ml-auto flex items-center gap-1.5">
                 <span className="text-[12px] text-text-tertiary">{tasks.length}</span>
@@ -94,7 +96,7 @@ export function TaskQueueSection({ collapsed }: { collapsed: boolean }) {
                     <div className="absolute left-0 top-1/2 w-2.5 h-px bg-border-subtle" />
                     <span className="text-[12px] text-text-secondary truncate">{label}</span>
                     {task.dangerousMode && (
-                      <span className="flex-shrink-0 text-[9px] text-red-400 font-medium">skip</span>
+                      <span className="flex-shrink-0 text-[9px] text-red-400 font-medium">{t('sidebar.sections.skipPermissionsBadge')}</span>
                     )}
                   </button>
                 )

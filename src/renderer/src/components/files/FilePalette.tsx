@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSessionStore } from '../../store/session-store'
 import { useFileSearch, type FuzzyMatch } from '../../hooks/use-file-search'
@@ -61,6 +62,7 @@ function ResultRow({
 }
 
 export function FilePalette() {
+  const { t } = useTranslation()
   const isOpen = useSessionStore((s) => s.filePaletteOpen)
   const setOpen = useSessionStore((s) => s.setFilePaletteOpen)
   const focusedSessionId = useSessionStore((s) => s.focusedSessionId)
@@ -205,7 +207,7 @@ export function FilePalette() {
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder={noSession ? 'Focus a session first' : 'Search files...'}
+                  placeholder={noSession ? t('filePalette.searchPlaceholder.noSession') : t('filePalette.searchPlaceholder.default')}
                   disabled={noSession}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -218,15 +220,15 @@ export function FilePalette() {
               <div ref={listRef} className="max-h-96 overflow-y-auto">
                 {noSession ? (
                   <div className="px-4 py-8 text-center text-sm text-text-tertiary">
-                    Focus a session first
+                    {t('filePalette.empty.noSession')}
                   </div>
                 ) : loading ? (
                   <div className="px-4 py-8 text-center text-sm text-text-tertiary">
-                    Loading files...
+                    {t('filePalette.loading')}
                   </div>
                 ) : results.length === 0 ? (
                   <div className="px-4 py-8 text-center text-sm text-text-tertiary">
-                    {query ? 'No files found' : 'No files in directory'}
+                    {query ? t('filePalette.empty.noResults') : t('filePalette.empty.noFiles')}
                   </div>
                 ) : (
                   results.map((match, i) => (
@@ -244,7 +246,7 @@ export function FilePalette() {
               {/* Truncation warning */}
               {truncated && (
                 <div className="px-4 py-1.5 text-xs text-yellow-500 bg-yellow-500/5 border-t border-border-subtle">
-                  File list truncated (50,000+ files)
+                  {t('filePalette.truncationWarning')}
                 </div>
               )}
 
@@ -255,25 +257,25 @@ export function FilePalette() {
                     <kbd className="px-1 py-0.5 rounded bg-surface-200 text-text-secondary">
                       Enter
                     </kbd>{' '}
-                    insert
+                    {t('filePalette.hint.insert')}
                   </span>
                   <span>
                     <kbd className="px-1 py-0.5 rounded bg-surface-200 text-text-secondary">
                       Cmd+Enter
                     </kbd>{' '}
-                    absolute
+                    {t('filePalette.hint.absolute')}
                   </span>
                   <span>
                     <kbd className="px-1 py-0.5 rounded bg-surface-200 text-text-secondary">
                       Cmd+C
                     </kbd>{' '}
-                    copy
+                    {t('filePalette.hint.copy')}
                   </span>
                   <span>
                     <kbd className="px-1 py-0.5 rounded bg-surface-200 text-text-secondary">
                       Space
                     </kbd>{' '}
-                    preview
+                    {t('filePalette.hint.preview')}
                   </span>
                 </div>
               )}

@@ -1,0 +1,687 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "close": "Close",
+    "edit": "Edit",
+    "rename": "Rename",
+    "duplicate": "Duplicate",
+    "export": "Export",
+    "open": "Open",
+    "add": "Add",
+    "remove": "Remove",
+    "back": "Back",
+    "continue": "Continue",
+    "done": "Done",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "loadingFiles": "Loading files...",
+    "refresh": "Refresh"
+  },
+  "sidebar": {
+    "newSession": {
+      "tooltip": "New session",
+      "localLabel": "This Mac",
+      "terminal": "Terminal",
+      "claudeCode": "Claude Code",
+      "claudeCodeSkipPermissions": "Claude Code (skip permissions)",
+      "remoteTerminal": "Terminal",
+      "remoteClaudeCode": "Claude Code",
+      "openClawAgent": "OpenClaw Agent..."
+    },
+    "newSessionButton": {
+      "starting": "Starting...",
+      "label": "New Session"
+    },
+    "footer": {
+      "usage": "Usage",
+      "settings": "Settings"
+    },
+    "update": {
+      "available": "Update available",
+      "later": "Later",
+      "update": "Update",
+      "fallbackLabel": "Update"
+    },
+    "sections": {
+      "queue": "Queue",
+      "skipPermissionsBadge": "skip",
+      "activeSessions": "Active",
+      "workflows": "Workflows",
+      "pinned": "Pinned"
+    },
+    "toggle": {
+      "claudeCodeMode": "Claude Code mode",
+      "terminalMode": "Terminal mode",
+      "skipPermissionsOn": "Skip permissions ON",
+      "skipPermissionsOff": "Skip permissions OFF"
+    },
+    "emptyState": {
+      "title": "No active sessions",
+      "description": "Open a project folder to start a session"
+    },
+    "contextMenu": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "rename": "Rename",
+      "hideFromSidebar": "Hide from sidebar",
+      "clearMessages": "Clear messages",
+      "duplicate": "Duplicate",
+      "group": "Group",
+      "resyncPin": "Re-sync pin",
+      "pinGroup": "Pin group",
+      "addTerminal": "Add terminal",
+      "ungroup": "Ungroup",
+      "copyPath": "Copy Path",
+      "revealInFinder": "Reveal in Finder",
+      "close": "Close",
+      "exportClave": "Export as .clave",
+      "removePin": "Remove Pin",
+      "renamePinned": "Rename"
+    },
+    "search": {
+      "placeholder": "Search sessions & Claude history...",
+      "noResults": "No matching sessions"
+    },
+    "resetSessions": {
+      "tooltip": "Reset sessions"
+    },
+    "pinned": {
+      "renamePrompt": "Rename pinned group"
+    },
+    "dialog": {
+      "deleteSession": {
+        "title": "Delete session",
+        "message": "Are you sure you want to delete this session? This will terminate the process."
+      },
+      "resetSessions": {
+        "title": "Reset sessions",
+        "messageWithTemplate": "Close all sessions and load \"{{name}}\" template?",
+        "messageBlank": "Close all sessions and start fresh?"
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "section": {
+      "profile": "Profile",
+      "appearance": "Appearance",
+      "appIcon": "App Icon",
+      "launchTemplates": "Launch Templates",
+      "workspaces": "Workspaces"
+    },
+    "profile": {
+      "icon": "Icon",
+      "color": "Color"
+    },
+    "appearance": {
+      "language": "Language"
+    },
+    "language": {
+      "en": "English",
+      "zhCN": "简体中文"
+    },
+    "theme": {
+      "dark": "Dark",
+      "light": "Light",
+      "coffee": "Coffee"
+    },
+    "appIcon": {
+      "dark": "Dark",
+      "light": "Light",
+      "claude": "Claude"
+    },
+    "template": {
+      "blank": "Blank",
+      "noSessions": "No sessions",
+      "tooltip": {
+        "default": "Default template",
+        "setAsDefault": "Set as default",
+        "unsetDefault": "Unset default",
+        "doubleClickRename": "Double-click to rename",
+        "delete": "Delete template"
+      },
+      "badge": {
+        "sessionsGroups": "{{sessionCount}} session(s), {{groupCount}} group(s)",
+        "sessions": "{{sessionCount}} session(s)"
+      },
+      "placeholder": {
+        "name": "Template name..."
+      },
+      "button": {
+        "save": "Save",
+        "saveLayout": "Save current layout"
+      }
+    },
+    "workspaces": {
+      "description": "Select a folder to discover .clave workspace files. The active workspace auto-loads its groups as pins.",
+      "error": {
+        "notFound": "No .clave files found in this folder.",
+        "alreadyRegistered": "Workspace already registered."
+      },
+      "discovery": {
+        "found": "Found {{count}} workspace files:",
+        "alreadyAdded": "(already added)"
+      },
+      "button": {
+        "addSelected": "Add Selected",
+        "cancel": "Cancel",
+        "add": "Add Workspace"
+      }
+    }
+  },
+  "locations": {
+    "status": {
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "connecting": "Connecting...",
+      "error": "Error"
+    },
+    "badge": {
+      "local": "LOCAL"
+    },
+    "tooltip": {
+      "disconnect": "Disconnect",
+      "connect": "Connect",
+      "remove": "Remove location"
+    },
+    "section": {
+      "title": "Locations",
+      "description": "Manage local and remote machines for terminal sessions and agents."
+    },
+    "button": {
+      "add": "Add Location"
+    }
+  },
+  "addLocation": {
+    "title": "Add Remote Location",
+    "label": {
+      "name": "Name",
+      "host": "Host",
+      "port": "Port",
+      "username": "Username",
+      "authMethod": "Auth Method",
+      "privateKeyPath": "Private Key Path",
+      "password": "Password"
+    },
+    "placeholder": {
+      "name": "My Mac Mini",
+      "host": "100.x.x.x or hostname",
+      "username": "admin"
+    },
+    "authMethod": {
+      "key": "SSH Key",
+      "password": "Password",
+      "agent": "SSH Agent"
+    },
+    "status": {
+      "testing": "Testing connection...",
+      "success": "Connection successful!",
+      "openclawDetected": "{{version}} detected (port {{port}})",
+      "openclawNotFound": "OpenClaw not detected",
+      "failed": "Connection failed",
+      "promptTest": "Click below to test the connection",
+      "installFailed": "Installation failed"
+    },
+    "button": {
+      "installing": "Installing...",
+      "installPlugin": "Install Clave Channel Plugin",
+      "cancel": "Cancel",
+      "back": "Back",
+      "testConnection": "Test Connection",
+      "continue": "Continue",
+      "done": "Done"
+    },
+    "option": {
+      "autoConnect": "Auto-connect on app launch"
+    }
+  },
+  "git": {
+    "discard": {
+      "confirmSingleFile": "Discard changes to {{name}}? This cannot be undone.",
+      "confirmMultipleFiles": "Discard all changes in {{count}} file(s)? This cannot be undone.",
+      "dialogTitle": "Discard changes"
+    },
+    "status": {
+      "noChangesInFolder": "No changes in this folder",
+      "workingTreeClean": "Working tree clean",
+      "filteredTo": "Filtered to: {{prefix}}",
+      "focusSessionHint": "Focus a session to view git status",
+      "loading": "Loading...",
+      "notARepo": "Not a git repository"
+    },
+    "section": {
+      "staged": "Staged",
+      "modified": "Modified",
+      "untracked": "Untracked"
+    },
+    "action": {
+      "unstageAll": "Unstage All",
+      "stageAll": "Stage All",
+      "discardAll": "Discard All"
+    },
+    "pull": {
+      "tooltip": "Pull remote changes",
+      "button": "↓ Pull",
+      "optionsTooltip": "Pull options",
+      "strategy": {
+        "auto": "Pull",
+        "merge": "Pull (Merge)",
+        "rebase": "Pull (Rebase)",
+        "ffOnly": "Pull (FF only)"
+      }
+    },
+    "push": {
+      "tooltip": "Push to remote",
+      "button": "↑ Push"
+    },
+    "commit": {
+      "placeholder": "Commit message...",
+      "placeholderGenerating": "Generating commit message...",
+      "generateTooltip": "Generate commit message",
+      "button": "Commit"
+    },
+    "controls": {
+      "collapseAll": {
+        "tooltip": "Collapse all"
+      },
+      "viewMode": {
+        "listTooltip": "List view",
+        "treeTooltip": "Tree view"
+      },
+      "panelMode": {
+        "changesTooltip": "Changes",
+        "logTooltip": "Commit log"
+      }
+    },
+    "sync": {
+      "step": {
+        "pulling": "Pulling",
+        "staging": "Staging",
+        "generating": "Generating message",
+        "committing": "Committing",
+        "pushing": "Pushing"
+      },
+      "result": {
+        "synced": "{{count}} synced",
+        "clean": "{{count}} clean",
+        "failed": "{{count}} failed",
+        "syncFailed": "Sync failed"
+      },
+      "syncing": "Syncing...",
+      "magicSyncTooltip": "Magic sync"
+    },
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{{minutes}}m ago",
+      "hoursAgo": "{{hours}}h ago",
+      "daysAgo": "{{days}}d ago",
+      "monthsAgo": "{{months}}mo ago",
+      "yearsAgo": "{{years}}y ago"
+    },
+    "log": {
+      "loadingFiles": "Loading files...",
+      "noFilesChanged": "No files changed",
+      "loadingHistory": "Loading history...",
+      "section": {
+        "outgoing": "Outgoing",
+        "incoming": "Incoming",
+        "history": "history"
+      },
+      "action": {
+        "push": "↑ Push",
+        "pull": "↓ Pull"
+      },
+      "noHistory": "No commit history"
+    },
+    "multiRepo": {
+      "dockNested": "Dock nested repos",
+      "restoreNested": "Restore nested repos",
+      "nestedRepoCount_one": "{{count}} nested repo",
+      "nestedRepoCount_other": "{{count}} nested repos"
+    }
+  },
+  "history": {
+    "time": {
+      "unknown": "Unknown time"
+    },
+    "toolContent": {
+      "collapse": "Collapse",
+      "expand": "Expand"
+    },
+    "panel": {
+      "selectSessionHint": "Select a Claude history session to view its conversation.",
+      "heading": "History",
+      "refresh": "Refresh",
+      "restoreSession": "Restore session",
+      "messageCount": "{{count}} messages",
+      "lastUpdated": "Last updated {{time}}",
+      "loadingMessages": "Loading session messages...",
+      "noMessages": "No visible messages in this session."
+    },
+    "sidebar": {
+      "heading": {
+        "search": "Conversations",
+        "default": "History"
+      },
+      "refreshTooltip": "Refresh Claude history",
+      "searchingFor": "Searching Claude history for \"{{query}}\"",
+      "searching": "Searching messages...",
+      "noSearchResults": "No matching conversation text.",
+      "loading": {
+        "title": "Loading Claude Code history",
+        "description": "First open scans working directories and sessions, usually takes a few seconds."
+      },
+      "noHistoryFound": "No Claude history was found on this Mac."
+    },
+    "search": {
+      "roleFilter": {
+        "all": "All",
+        "user": "User",
+        "assistant": "Assistant"
+      }
+    },
+    "role": {
+      "user": "User",
+      "assistant": "Assistant"
+    }
+  },
+  "board": {
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{{minutes}}m ago",
+      "hoursAgo": "{{hours}}h ago",
+      "daysAgo": "{{days}}d ago"
+    },
+    "contextMenu": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "search": {
+      "placeholder": "Search tasks by prompt or folder..."
+    },
+    "button": {
+      "addTask": "Add Task",
+      "run": "Run"
+    },
+    "empty": {
+      "noTasks": "No tasks yet",
+      "noTasksHint": "Create tasks to queue them for later",
+      "noMatch": "No matching tasks",
+      "noMatchHint": "Try a different search term"
+    },
+    "badge": {
+      "skipPerms": "skip-perms"
+    },
+    "tooltip": {
+      "runTask": "Run this task"
+    }
+  },
+  "taskForm": {
+    "title": {
+      "edit": "Edit Task",
+      "new": "New Task"
+    },
+    "label": {
+      "prompt": "Prompt",
+      "folder": "Folder",
+      "titleOptional": "Title (optional)"
+    },
+    "placeholder": {
+      "prompt": "Instructions for Claude Code...",
+      "folder": "Select a folder...",
+      "title": "Short label for the task"
+    },
+    "button": {
+      "browse": "Browse",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create"
+    },
+    "option": {
+      "skipPermissions": "Skip permissions"
+    },
+    "hint": {
+      "submit": "submit"
+    }
+  },
+  "agent": {
+    "chat": {
+      "emptyState": {
+        "noAgentSelected": "Select an agent to start chatting",
+        "startConversation": "Start a conversation with {{name}}"
+      },
+      "input": {
+        "placeholder": "Send a message..."
+      },
+      "message": {
+        "error": {
+          "sendFailed": "Failed to send"
+        }
+      }
+    },
+    "picker": {
+      "unknownLocation": "Unknown",
+      "emptyState": {
+        "noAgents": "No connected locations have agents.",
+        "connectHint": "Connect a location in Settings."
+      },
+      "button": {
+        "addAgent": "Add"
+      }
+    }
+  },
+  "terminal": {
+    "header": {
+      "server": {
+        "tooltip": {
+          "open": "Open {{url}}",
+          "restart": "Restart server ({{command}})",
+          "starting": "Starting server...",
+          "stop": "Stop server (Ctrl+C)"
+        }
+      },
+      "button": {
+        "saveDiscussion": "Save discussion",
+        "savePlan": "Save plan",
+        "killSession": "Kill session"
+      },
+      "confirm": {
+        "delete": {
+          "title": "Delete session",
+          "message": "Are you sure you want to delete this session? This will terminate the process."
+        }
+      }
+    },
+    "error": {
+      "loadFailed": "Terminal failed to load"
+    }
+  },
+  "confirmDialog": {
+    "defaultConfirmLabel": "Delete",
+    "cancel": "Cancel"
+  },
+  "groupCommand": {
+    "title": {
+      "edit": "Edit terminal",
+      "add": "Add terminal"
+    },
+    "description": "Configure a terminal for this group.",
+    "folderPicker": {
+      "tooltip": "Select folder",
+      "placeholder": "Select folder...",
+      "change": "Change"
+    },
+    "commandInput": {
+      "placeholder": "e.g., npm run dev (optional)"
+    },
+    "mode": {
+      "label": "Mode:",
+      "prefill": "Pre-fill",
+      "autoExecute": "Auto-execute"
+    },
+    "icon": {
+      "label": "Icon:"
+    },
+    "color": {
+      "label": "Color:"
+    },
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "exportClave": {
+    "title": "Export as .clave",
+    "description": "Save this group definition to a file.",
+    "folderPicker": {
+      "tooltip": "Select folder",
+      "loading": "Loading...",
+      "change": "Change"
+    },
+    "fileName": {
+      "placeholder": "filename.clave"
+    },
+    "keepSynced": {
+      "label": "Keep synced",
+      "description": "Changes to the group will auto-update the file"
+    },
+    "cancel": "Cancel",
+    "export": "Export"
+  },
+  "updateOverlay": {
+    "downloading": {
+      "title": "Updating to",
+      "fallbackVersion": "new version",
+      "starting": "Starting download..."
+    },
+    "downloaded": {
+      "title": "Restarting...",
+      "fallbackLabel": "Update",
+      "subtitle": "is ready to go"
+    },
+    "error": {
+      "title": "Update failed",
+      "fallbackMessage": "An unexpected error occurred",
+      "back": "Back",
+      "retry": "Retry"
+    },
+    "cancel": "Cancel"
+  },
+  "filePalette": {
+    "searchPlaceholder": {
+      "noSession": "Focus a session first",
+      "default": "Search files..."
+    },
+    "empty": {
+      "noSession": "Focus a session first",
+      "noResults": "No files found",
+      "noFiles": "No files in directory"
+    },
+    "loading": "Loading files...",
+    "truncationWarning": "File list truncated (50,000+ files)",
+    "hint": {
+      "insert": "insert",
+      "absolute": "absolute",
+      "copy": "copy",
+      "preview": "preview"
+    }
+  },
+  "remoteDirectoryPicker": {
+    "error": {
+      "readFailed": "Failed to read directory"
+    },
+    "title": "Choose directory on",
+    "pathInput": {
+      "placeholder": "/path/to/directory",
+      "go": "Go"
+    },
+    "loading": "Loading...",
+    "empty": "No subdirectories",
+    "cancel": "Cancel",
+    "open": "Open"
+  },
+  "usagePanel": {
+    "error": {
+      "notAvailable": "Usage stats not available outside Electron",
+      "loadFailed": "Failed to load usage data"
+    },
+    "loading": "Loading usage data...",
+    "retry": "Retry",
+    "title": "Usage",
+    "refresh": {
+      "tooltip": "Refresh"
+    },
+    "statCards": {
+      "estimatedCost": {
+        "label": "Est. Cost"
+      },
+      "allTime": "all time",
+      "tokens": {
+        "label": "Tokens"
+      },
+      "sessions": {
+        "label": "Sessions"
+      },
+      "total": "total",
+      "messages": {
+        "label": "Messages"
+      }
+    },
+    "activityChart": {
+      "title": "Activity (last 30 days)",
+      "messages": "messages"
+    },
+    "modelBreakdown": {
+      "title": "Model breakdown",
+      "tokens": "tokens"
+    },
+    "hourGrid": {
+      "title": "Activity by hour",
+      "messages": "messages"
+    }
+  },
+  "menu": {
+    "app": {
+      "about": "About Clave",
+      "services": "Services",
+      "hide": "Hide Clave",
+      "hideOthers": "Hide Others",
+      "showAll": "Show All",
+      "quit": "Quit Clave"
+    },
+    "file": {
+      "label": "File",
+      "newWindow": "New Window",
+      "closeWindow": "Close Window"
+    },
+    "edit": {
+      "label": "Edit",
+      "undo": "Undo",
+      "redo": "Redo",
+      "cut": "Cut",
+      "copy": "Copy",
+      "paste": "Paste",
+      "selectAll": "Select All"
+    },
+    "view": {
+      "label": "View",
+      "reload": "Reload",
+      "forceReload": "Force Reload",
+      "toggleDevTools": "Toggle Developer Tools",
+      "resetZoom": "Actual Size",
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out",
+      "toggleFullScreen": "Toggle Full Screen"
+    },
+    "window": {
+      "label": "Window",
+      "minimize": "Minimize",
+      "zoom": "Zoom",
+      "front": "Bring All to Front"
+    },
+    "help": {
+      "label": "Help"
+    }
+  }
+}

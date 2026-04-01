@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 import { ListBulletIcon, Bars3BottomLeftIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { IconButton } from '../ui/tooltip'
@@ -51,12 +52,13 @@ export function SectionHeader({
 }
 
 export function CollapseAllButton() {
+  const { t } = useTranslation()
   const triggerCollapseAll = useSessionStore((s) => s.triggerCollapseAll)
   return (
     <IconButton
       onClick={triggerCollapseAll}
       className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors flex-shrink-0"
-      tooltip="Collapse all"
+      tooltip={t('git.controls.collapseAll.tooltip')}
     >
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
         <path d="M2 8l4-3 4 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
@@ -67,6 +69,7 @@ export function CollapseAllButton() {
 }
 
 export function ViewModeToggle() {
+  const { t } = useTranslation()
   const gitViewMode = useSessionStore((s) => s.gitViewMode)
   const setGitViewMode = useSessionStore((s) => s.setGitViewMode)
   const isTree = gitViewMode === 'tree'
@@ -74,7 +77,7 @@ export function ViewModeToggle() {
     <IconButton
       onClick={() => setGitViewMode(isTree ? 'list' : 'tree')}
       className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors flex-shrink-0"
-      tooltip={isTree ? 'List view' : 'Tree view'}
+      tooltip={isTree ? t('git.controls.viewMode.listTooltip') : t('git.controls.viewMode.treeTooltip')}
     >
       {isTree ? (
         <ListBulletIcon className="w-3 h-3" />
@@ -86,6 +89,7 @@ export function ViewModeToggle() {
 }
 
 export function PanelModeToggle() {
+  const { t } = useTranslation()
   const gitPanelMode = useSessionStore((s) => s.gitPanelMode)
   const setGitPanelMode = useSessionStore((s) => s.setGitPanelMode)
   const isLog = gitPanelMode === 'log'
@@ -93,7 +97,7 @@ export function PanelModeToggle() {
     <IconButton
       onClick={() => setGitPanelMode(isLog ? 'changes' : 'log')}
       className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors flex-shrink-0"
-      tooltip={isLog ? 'Changes' : 'Commit log'}
+      tooltip={isLog ? t('git.controls.panelMode.changesTooltip') : t('git.controls.panelMode.logTooltip')}
     >
       {isLog ? (
         /* Changes/diff icon */
@@ -111,12 +115,12 @@ export function PanelModeToggle() {
   )
 }
 
-const STEP_LABELS: Record<MagicSyncStep, string> = {
-  pulling: 'Pulling',
-  staging: 'Staging',
-  generating: 'Generating message',
-  committing: 'Committing',
-  pushing: 'Pushing'
+const STEP_LABEL_KEYS: Record<MagicSyncStep, string> = {
+  pulling: 'git.sync.step.pulling',
+  staging: 'git.sync.step.staging',
+  generating: 'git.sync.step.generating',
+  committing: 'git.sync.step.committing',
+  pushing: 'git.sync.step.pushing'
 }
 
 export function MagicSyncButton({
@@ -126,6 +130,7 @@ export function MagicSyncButton({
   repoPaths: string[]
   onDone?: () => void
 }) {
+  const { t } = useTranslation()
   const [syncing, setSyncing] = useState(false)
   const [currentStep, setCurrentStep] = useState<string | null>(null)
   const [resultMessage, setResultMessage] = useState<string | null>(null)
@@ -134,7 +139,7 @@ export function MagicSyncButton({
   useEffect(() => {
     if (!syncing) return
     const cleanup = window.electronAPI.onMagicSyncProgress((_repoPath, step) => {
-      setCurrentStep(STEP_LABELS[step as MagicSyncStep] ?? step)
+      setCurrentStep(t(STEP_LABEL_KEYS[step as MagicSyncStep] ?? step))
     })
     return cleanup
   }, [syncing])
@@ -158,12 +163,12 @@ export function MagicSyncButton({
       const skipped = results.filter((r) => r.actions.length === 0 && !r.error)
 
       const parts: string[] = []
-      if (synced.length > 0) parts.push(`${synced.length} synced`)
-      if (skipped.length > 0) parts.push(`${skipped.length} clean`)
-      if (errors.length > 0) parts.push(`${errors.length} failed`)
+      if (synced.length > 0) parts.push(t('git.sync.result.synced', { count: synced.length }))
+      if (skipped.length > 0) parts.push(t('git.sync.result.clean', { count: skipped.length }))
+      if (errors.length > 0) parts.push(t('git.sync.result.failed', { count: errors.length }))
       setResultMessage(parts.join(', '))
     } catch (err) {
-      setResultMessage('Sync failed')
+      setResultMessage(t('git.sync.result.syncFailed'))
       console.error('[magic-sync]', err)
     } finally {
       setSyncing(false)
@@ -178,13 +183,13 @@ export function MagicSyncButton({
         onClick={handleSync}
         disabled={syncing || repoPaths.length === 0}
         className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-surface-200 transition-colors flex-shrink-0 disabled:opacity-40"
-        tooltip={syncing ? (currentStep ?? 'Syncing...') : 'Magic sync'}
+        tooltip={syncing ? (currentStep ?? t('git.sync.syncing')) : t('git.sync.magicSyncTooltip')}
       >
         <ArrowPathIcon className={`w-3 h-3 ${syncing ? 'animate-spin' : ''}`} />
       </IconButton>
       {(syncing || resultMessage) && (
         <span className="ml-1 text-[10px] text-text-tertiary whitespace-nowrap">
-          {syncing ? (currentStep ?? 'Syncing...') : resultMessage}
+          {syncing ? (currentStep ?? t('git.sync.syncing')) : resultMessage}
         </span>
       )}
     </div>

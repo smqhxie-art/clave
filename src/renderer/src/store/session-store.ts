@@ -13,6 +13,7 @@ import type {
   SessionType
 } from './session-types'
 import type { Agent, AgentStatus } from '../../../shared/remote-types'
+import i18n from '../i18n'
 
 // Re-export types and constants so existing imports continue to work
 export type { Theme, AppIcon, ActivityStatus, GroupTerminalConfig, GroupTerminalColor, GroupTerminalIcon, Session, SessionGroup, FileTab, ActiveView, SessionType }
@@ -29,6 +30,7 @@ interface SessionState {
   sidebarWidth: number
   theme: Theme
   appIcon: AppIcon
+  language: 'en' | 'zh-CN'
   searchQuery: string
   claudeMode: boolean
   dangerousMode: boolean
@@ -76,6 +78,7 @@ interface SessionState {
   setSidebarWidth: (width: number) => void
   setTheme: (theme: Theme) => void
   setAppIcon: (icon: AppIcon) => void
+  setLanguage: (lang: 'en' | 'zh-CN') => void
   updateSessionAlive: (id: string, alive: boolean) => void
   setSessionActivity: (id: string, status: ActivityStatus) => void
   setSessionPromptWaiting: (id: string, promptType: string | null) => void
@@ -157,6 +160,7 @@ export const useSessionStore = create<SessionState>((set) => ({
   sidebarWidth: 260,
   theme: (localStorage.getItem('clave-theme') as Theme) || 'coffee',
   appIcon: (localStorage.getItem('clave-app-icon') as AppIcon) || 'dark',
+  language: (localStorage.getItem('clave-language') as 'en' | 'zh-CN') || 'en',
   searchQuery: '',
   claudeMode: true,
   dangerousMode: false,
@@ -507,6 +511,13 @@ export const useSessionStore = create<SessionState>((set) => ({
     localStorage.setItem('clave-app-icon', appIcon)
     set({ appIcon })
     window.electronAPI?.setAppIcon(appIcon)
+  },
+
+  setLanguage: (lang) => {
+    localStorage.setItem('clave-language', lang)
+    i18n.changeLanguage(lang)
+    window.electronAPI?.setMenuLanguage(lang)
+    set({ language: lang })
   },
 
   updateSessionAlive: (id, alive) =>

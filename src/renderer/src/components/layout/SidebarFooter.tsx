@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronUpDownIcon,
@@ -14,6 +15,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover'
 import { UserIconDisplay } from '../ui/UserIconDisplay'
 
 export function SidebarFooter() {
+  const { t } = useTranslation()
   const name = useUserStore((s) => s.name)
   const avatarIcon = useUserStore((s) => s.avatarIcon)
   const avatarColor = useUserStore((s) => s.avatarColor)
@@ -46,8 +48,8 @@ export function SidebarFooter() {
   const showUpdateDot = dismissed && version !== null && phase === 'available'
 
   const items: { view: ActiveView; icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; label: string }[] = [
-    { view: 'usage', icon: ChartBarIcon, label: 'Usage' },
-    { view: 'settings', icon: Cog6ToothIcon, label: 'Settings' }
+    { view: 'usage', icon: ChartBarIcon, label: t('sidebar.footer.usage') },
+    { view: 'settings', icon: Cog6ToothIcon, label: t('sidebar.footer.settings') }
   ]
 
   return (
@@ -67,20 +69,20 @@ export function SidebarFooter() {
                 <ArrowDownTrayIcon className="w-3.5 h-3.5 text-accent" />
               </div>
               <p className="text-[12px] font-medium text-text-primary leading-tight">
-                {version ? `v${version}` : 'Update'}
+                {version ? `v${version}` : t('sidebar.update.fallbackLabel')}
               </p>
               <div className="flex items-center gap-1 ml-auto">
                 <button
                   onClick={dismiss}
                   className="px-1.5 py-0.5 text-[11px] font-medium text-text-tertiary hover:text-text-secondary rounded-md hover:bg-surface-200 transition-colors"
                 >
-                  Later
+                  {t('sidebar.update.later')}
                 </button>
                 <button
                   onClick={handleUpdate}
                   className="px-2 py-0.5 text-[11px] font-medium text-white bg-accent hover:bg-accent-hover rounded-md transition-colors"
                 >
-                  Update
+                  {t('sidebar.update.update')}
                 </button>
               </div>
             </div>
@@ -167,7 +169,7 @@ export function SidebarFooter() {
                 className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[13px] transition-colors cursor-default select-none text-accent hover:bg-surface-200"
               >
                 <ArrowDownTrayIcon className="w-4 h-4 flex-shrink-0" />
-                <span>Update available</span>
+                <span>{t('sidebar.update.available')}</span>
                 <span className="ml-auto text-[11px] text-text-tertiary">{version ? `v${version}` : ''}</span>
               </button>
             </>

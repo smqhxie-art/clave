@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useUpdaterStore } from '../../store/updater-store'
 
@@ -14,6 +15,7 @@ function formatSpeed(bytesPerSecond: number): string {
 }
 
 export function UpdateOverlay() {
+  const { t } = useTranslation()
   const phase = useUpdaterStore((s) => s.phase)
   const version = useUpdaterStore((s) => s.version)
   const progress = useUpdaterStore((s) => s.progress)
@@ -131,12 +133,12 @@ export function UpdateOverlay() {
               {phase === 'downloading' && (
                 <>
                   <p className="text-[15px] font-medium text-text-primary">
-                    Updating to {version ? `v${version}` : 'new version'}
+                    {t('updateOverlay.downloading.title')} {version ? `v${version}` : t('updateOverlay.downloading.fallbackVersion')}
                   </p>
                   <p className="text-[13px] text-text-tertiary mt-1">
                     {progress.total > 0
                       ? `${formatBytes(progress.transferred)} / ${formatBytes(progress.total)}`
-                      : 'Starting download...'}
+                      : t('updateOverlay.downloading.starting')}
                     {progress.bytesPerSecond > 0 && (
                       <span className="ml-2">{formatSpeed(progress.bytesPerSecond)}</span>
                     )}
@@ -145,17 +147,17 @@ export function UpdateOverlay() {
               )}
               {phase === 'downloaded' && (
                 <>
-                  <p className="text-[15px] font-medium text-text-primary">Restarting...</p>
+                  <p className="text-[15px] font-medium text-text-primary">{t('updateOverlay.downloaded.title')}</p>
                   <p className="text-[13px] text-text-tertiary mt-1">
-                    {version ? `v${version}` : 'Update'} is ready to go
+                    {version ? `v${version}` : t('updateOverlay.downloaded.fallbackLabel')} {t('updateOverlay.downloaded.subtitle')}
                   </p>
                 </>
               )}
               {phase === 'error' && (
                 <>
-                  <p className="text-[15px] font-medium text-text-primary">Update failed</p>
+                  <p className="text-[15px] font-medium text-text-primary">{t('updateOverlay.error.title')}</p>
                   <p className="text-[13px] text-text-tertiary mt-1 max-w-[280px]">
-                    {errorMessage || 'An unexpected error occurred'}
+                    {errorMessage || t('updateOverlay.error.fallbackMessage')}
                   </p>
                 </>
               )}
@@ -185,7 +187,7 @@ export function UpdateOverlay() {
                   onClick={handleCancel}
                   className="px-4 py-2 text-[13px] font-medium text-text-secondary hover:text-text-primary rounded-lg border border-border hover:bg-surface-200 transition-colors"
                 >
-                  Cancel
+                  {t('updateOverlay.cancel')}
                 </button>
               )}
               {phase === 'error' && (
@@ -194,13 +196,13 @@ export function UpdateOverlay() {
                     onClick={reset}
                     className="px-4 py-2 text-[13px] font-medium text-text-secondary hover:text-text-primary rounded-lg border border-border hover:bg-surface-200 transition-colors"
                   >
-                    Back
+                    {t('updateOverlay.error.back')}
                   </button>
                   <button
                     onClick={handleRetry}
                     className="px-4 py-2 text-[13px] font-medium text-white bg-accent hover:bg-accent-hover rounded-lg transition-colors"
                   >
-                    Retry
+                    {t('updateOverlay.error.retry')}
                   </button>
                 </>
               )}

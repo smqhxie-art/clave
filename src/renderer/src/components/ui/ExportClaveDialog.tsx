@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FolderIcon } from '@heroicons/react/24/outline'
@@ -16,6 +17,7 @@ export function ExportClaveDialog({
   onExport,
   onCancel
 }: ExportClaveDialogProps) {
+  const { t } = useTranslation()
   const [folder, setFolder] = useState<string | null>(null)
   const [fileName, setFileName] = useState(defaultFileName)
   const [keepSynced, setKeepSynced] = useState(false)
@@ -78,10 +80,10 @@ export function ExportClaveDialog({
                 <div className="bg-surface-0 rounded-xl border border-border shadow-2xl overflow-hidden">
                   <div className="px-4 pt-4 pb-3">
                     <DialogPrimitive.Title className="text-[13px] font-semibold text-text-primary">
-                      Export as .clave
+                      {t('exportClave.title')}
                     </DialogPrimitive.Title>
                     <DialogPrimitive.Description className="mt-1 text-xs text-text-secondary">
-                      Save this group definition to a file.
+                      {t('exportClave.description')}
                     </DialogPrimitive.Description>
 
                     {/* Folder picker */}
@@ -89,14 +91,14 @@ export function ExportClaveDialog({
                       type="button"
                       onClick={handlePickFolder}
                       className="mt-3 w-full h-8 px-3 rounded-lg bg-surface-100 border border-border-subtle flex items-center gap-2 text-xs hover:bg-surface-200 transition-colors group"
-                      title={folder ?? 'Select folder'}
+                      title={folder ?? t('exportClave.folderPicker.tooltip')}
                     >
                       <FolderIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
                       <span className="flex-1 min-w-0 truncate text-left text-text-primary">
-                        {folderName ?? 'Loading...'}
+                        {folderName ?? t('exportClave.folderPicker.loading')}
                       </span>
                       <span className="text-[10px] text-text-tertiary group-hover:text-text-secondary flex-shrink-0">
-                        Change
+                        {t('exportClave.folderPicker.change')}
                       </span>
                     </button>
 
@@ -112,7 +114,7 @@ export function ExportClaveDialog({
                           handleExport()
                         }
                       }}
-                      placeholder="filename.clave"
+                      placeholder={t('exportClave.fileName.placeholder')}
                       className="mt-2 w-full h-8 px-3 rounded-lg bg-surface-100 border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary outline-none focus:ring-1 focus:ring-accent transition-colors"
                     />
 
@@ -132,9 +134,9 @@ export function ExportClaveDialog({
                         `} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <span className="text-xs text-text-primary">Keep synced</span>
+                        <span className="text-xs text-text-primary">{t('exportClave.keepSynced.label')}</span>
                         <p className="text-[10px] text-text-tertiary leading-tight mt-0.5">
-                          Changes to the group will auto-update the file
+                          {t('exportClave.keepSynced.description')}
                         </p>
                       </div>
                     </button>
@@ -146,14 +148,14 @@ export function ExportClaveDialog({
                       onClick={onCancel}
                       className="flex-1 py-2.5 text-[13px] font-medium text-text-secondary hover:text-text-primary hover:bg-surface-100 transition-colors border-r border-border-subtle"
                     >
-                      Cancel
+                      {t('exportClave.cancel')}
                     </button>
                     <button
                       type="button"
                       onClick={handleExport}
                       className="flex-1 py-2.5 text-[13px] font-medium text-accent hover:brightness-110 hover:bg-surface-100 transition-colors outline-none"
                     >
-                      Export
+                      {t('exportClave.export')}
                     </button>
                   </div>
                 </div>

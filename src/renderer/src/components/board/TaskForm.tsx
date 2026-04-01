@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useBoardStore } from '../../store/board-store'
 
@@ -9,6 +10,7 @@ interface TaskFormProps {
 }
 
 export function TaskForm({ isOpen, onClose, editTask }: TaskFormProps) {
+  const { t } = useTranslation()
   const addTask = useBoardStore((s) => s.addTask)
   const updateTask = useBoardStore((s) => s.updateTask)
 
@@ -104,31 +106,31 @@ export function TaskForm({ isOpen, onClose, editTask }: TaskFormProps) {
               >
                 <div className="px-5 pt-4 pb-3">
                   <h2 className="text-sm font-semibold text-text-primary">
-                    {editTask ? 'Edit Task' : 'New Task'}
+                    {editTask ? t('taskForm.title.edit') : t('taskForm.title.new')}
                   </h2>
                 </div>
 
                 <div className="px-5 space-y-3 pb-4">
                   <div>
-                    <label className="block text-xs text-text-secondary mb-1">Prompt</label>
+                    <label className="block text-xs text-text-secondary mb-1">{t('taskForm.label.prompt')}</label>
                     <textarea
                       ref={promptRef}
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
-                      placeholder="Instructions for Claude Code..."
+                      placeholder={t('taskForm.placeholder.prompt')}
                       rows={4}
                       className="w-full px-3 py-2 rounded-lg bg-surface-200 border-none text-sm text-text-primary placeholder:text-text-tertiary outline-none focus:ring-1 focus:ring-border transition-colors resize-none font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs text-text-secondary mb-1">Folder</label>
+                    <label className="block text-xs text-text-secondary mb-1">{t('taskForm.label.folder')}</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
                         value={cwd}
                         readOnly
-                        placeholder="Select a folder..."
+                        placeholder={t('taskForm.placeholder.folder')}
                         className="flex-1 h-8 px-3 rounded-lg bg-surface-200 border-none text-sm text-text-primary placeholder:text-text-tertiary outline-none cursor-default truncate"
                       />
                       <button
@@ -136,7 +138,7 @@ export function TaskForm({ isOpen, onClose, editTask }: TaskFormProps) {
                         onClick={handlePickFolder}
                         className="h-8 px-3 rounded-lg bg-surface-200 hover:bg-surface-300 text-text-secondary hover:text-text-primary text-xs font-medium transition-colors flex-shrink-0"
                       >
-                        Browse
+                        {t('taskForm.button.browse')}
                       </button>
                     </div>
                   </div>
@@ -152,17 +154,17 @@ export function TaskForm({ isOpen, onClose, editTask }: TaskFormProps) {
                       <span className={`absolute top-[2px] left-[2px] w-[14px] h-[14px] rounded-full bg-white transition-transform ${dangerousMode ? 'translate-x-[14px]' : ''}`} />
                     </button>
                     <span className={`text-xs transition-colors ${dangerousMode ? 'text-red-400' : 'text-text-secondary group-hover:text-text-primary'}`}>
-                      Skip permissions
+                      {t('taskForm.option.skipPermissions')}
                     </span>
                   </label>
 
                   <div>
-                    <label className="block text-xs text-text-tertiary mb-1">Title (optional)</label>
+                    <label className="block text-xs text-text-tertiary mb-1">{t('taskForm.label.titleOptional')}</label>
                     <input
                       type="text"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Short label for the task"
+                      placeholder={t('taskForm.placeholder.title')}
                       className="w-full h-8 px-3 rounded-lg bg-surface-200 border-none text-sm text-text-primary placeholder:text-text-tertiary outline-none focus:ring-1 focus:ring-border transition-colors"
                     />
                   </div>
@@ -170,7 +172,7 @@ export function TaskForm({ isOpen, onClose, editTask }: TaskFormProps) {
 
                 <div className="px-5 py-3 border-t border-border-subtle flex items-center justify-between">
                   <span className="text-[11px] text-text-tertiary">
-                    <kbd className="px-1 py-0.5 rounded bg-surface-200 text-text-secondary">Cmd+Enter</kbd> submit
+                    <kbd className="px-1 py-0.5 rounded bg-surface-200 text-text-secondary">Cmd+Enter</kbd> {t('taskForm.hint.submit')}
                   </span>
                   <div className="flex gap-2">
                     <button
@@ -178,14 +180,14 @@ export function TaskForm({ isOpen, onClose, editTask }: TaskFormProps) {
                       onClick={onClose}
                       className="h-7 px-3 rounded-lg text-xs text-text-secondary hover:text-text-primary hover:bg-surface-200 transition-colors"
                     >
-                      Cancel
+                      {t('taskForm.button.cancel')}
                     </button>
                     <button
                       type="submit"
                       disabled={!prompt.trim() || !cwd.trim()}
                       className="h-7 px-4 rounded-lg text-xs font-medium bg-accent text-white hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      {editTask ? 'Save' : 'Create'}
+                      {editTask ? t('taskForm.button.save') : t('taskForm.button.create')}
                     </button>
                   </div>
                 </div>

@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { NewSessionButton } from '../session/NewSessionButton'
 
 export function EmptyState() {
+  const { t } = useTranslation()
   return (
     <div className="flex-1 flex items-center justify-center">
       <div className="flex flex-col items-center gap-4 text-center animate-fade-in">
@@ -42,9 +44,9 @@ export function EmptyState() {
         </div>
 
         <div>
-          <h3 className="text-sm font-medium text-text-primary mb-1">No active sessions</h3>
+          <h3 className="text-sm font-medium text-text-primary mb-1">{t('sidebar.emptyState.title')}</h3>
           <p className="text-xs text-text-tertiary mb-4">
-            Open a project folder to start a session
+            {t('sidebar.emptyState.description')}
           </p>
         </div>
 

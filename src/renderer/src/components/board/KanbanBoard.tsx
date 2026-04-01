@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MagnifyingGlassIcon, PlusIcon, FolderIcon } from '@heroicons/react/24/outline'
 import { useBoardStore } from '../../store/board-store'
 import { useSessionStore } from '../../store/session-store'
@@ -14,21 +15,22 @@ function shortenCwd(cwd: string): string {
   return '~/' + parts.slice(-2).join('/')
 }
 
-function formatDate(ts: number): string {
+function formatDate(ts: number, t: (key: string, options?: Record<string, unknown>) => string): string {
   const d = new Date(ts)
   const now = new Date()
   const diffMs = now.getTime() - d.getTime()
   const diffMin = Math.floor(diffMs / 60000)
-  if (diffMin < 1) return 'just now'
-  if (diffMin < 60) return `${diffMin}m ago`
+  if (diffMin < 1) return t('board.time.justNow')
+  if (diffMin < 60) return t('board.time.minutesAgo', { minutes: diffMin })
   const diffHr = Math.floor(diffMin / 60)
-  if (diffHr < 24) return `${diffHr}h ago`
+  if (diffHr < 24) return t('board.time.hoursAgo', { hours: diffHr })
   const diffDay = Math.floor(diffHr / 24)
-  if (diffDay < 7) return `${diffDay}d ago`
+  if (diffDay < 7) return t('board.time.daysAgo', { days: diffDay })
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
 }
 
 export function TaskQueue() {
+  const { t } = useTranslation()
   const tasks = useBoardStore((s) => s.tasks)
   const removeTask = useBoardStore((s) => s.removeTask)
   const deleteTask = useBoardStore((s) => s.deleteTask)
@@ -134,8 +136,8 @@ export function TaskQueue() {
         x: e.clientX,
         y: e.clientY,
         items: [
-          { label: 'Edit', onClick: () => handleEdit(task) },
-          { label: 'Delete', onClick: () => deleteTask(task.id), danger: true }
+          { label: t('board.contextMenu.edit'), onClick: () => handleEdit(task) },
+          { label: t('board.contextMenu.delete'), onClick: () => deleteTask(task.id), danger: true }
         ]
       })
     },
@@ -152,7 +154,7 @@ export function TaskQueue() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search tasks by prompt or folder..."
+            placeholder={t('board.search.placeholder')}
             className="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-100 border border-border-subtle text-sm text-text-primary placeholder:text-text-tertiary outline-none focus:ring-1 focus:ring-accent/40 focus:border-accent/40 transition-all"
           />
         </div>
@@ -161,7 +163,7 @@ export function TaskQueue() {
           className="h-9 px-3.5 rounded-lg text-xs font-medium bg-accent text-white hover:bg-accent/90 transition-colors flex items-center gap-1.5 flex-shrink-0"
         >
           <PlusIcon className="w-3.5 h-3.5" />
-          Add Task
+          {t('board.button.addTask')}
         </button>
       </div>
 
@@ -176,13 +178,13 @@ export function TaskQueue() {
                     <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span className="text-sm font-medium text-text-secondary">No tasks yet</span>
-                <span className="text-xs mt-1">Create tasks to queue them for later</span>
+                <span className="text-sm font-medium text-text-secondary">{t('board.empty.noTasks')}</span>
+                <span className="text-xs mt-1">{t('board.empty.noTasksHint')}</span>
               </>
             ) : (
               <>
-                <span className="text-sm font-medium text-text-secondary">No matching tasks</span>
-                <span className="text-xs mt-1">Try a different search term</span>
+                <span className="text-sm font-medium text-text-secondary">{t('board.empty.noMatch')}</span>
+                <span className="text-xs mt-1">{t('board.empty.noMatchHint')}</span>
               </>
             )}
           </div>
@@ -208,7 +210,7 @@ export function TaskQueue() {
                     )}
                     {task.dangerousMode && (
                       <span className="flex-shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-500/10 text-red-400">
-                        skip-perms
+                        {t('board.badge.skipPerms')}
                       </span>
                     )}
                   </div>
@@ -231,7 +233,7 @@ export function TaskQueue() {
                     </span>
                     <span className="text-text-tertiary/30">·</span>
                     <span className="text-[11px] text-text-tertiary flex-shrink-0">
-                      {formatDate(task.createdAt)}
+                      {formatDate(task.createdAt, t)}
                     </span>
                   </div>
                 </div>
@@ -244,12 +246,12 @@ export function TaskQueue() {
                     'bg-green-500/10 hover:bg-green-500/20 text-green-500',
                     'opacity-0 group-hover:opacity-100'
                   )}
-                  title="Run this task"
+                  title={t('board.tooltip.runTask')}
                 >
                   <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                     <path d="M3 1.5L10 6L3 10.5V1.5Z" fill="currentColor" />
                   </svg>
-                  Run
+                  {t('board.button.run')}
                 </button>
               </div>
             ))}

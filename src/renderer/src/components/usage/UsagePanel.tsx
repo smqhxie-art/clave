@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { UsageData } from '../../../../preload/index.d'
 
 function formatNumber(n: number): string {
@@ -46,6 +47,7 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub: st
 }
 
 function ActivityChart({ data }: { data: UsageData }) {
+  const { t } = useTranslation()
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   const last30 = useMemo(() => {
@@ -69,10 +71,10 @@ function ActivityChart({ data }: { data: UsageData }) {
   return (
     <div className="bg-surface-100 border border-border-subtle rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium text-text-secondary">Activity (last 30 days)</span>
+        <span className="text-xs font-medium text-text-secondary">{t('usagePanel.activityChart.title')}</span>
         {hoveredIdx !== null && last30[hoveredIdx] && (
           <span className="text-[11px] text-text-tertiary">
-            {last30[hoveredIdx].date}: {last30[hoveredIdx].messageCount.toLocaleString()} messages
+            {last30[hoveredIdx].date}: {last30[hoveredIdx].messageCount.toLocaleString()} {t('usagePanel.activityChart.messages')}
           </span>
         )}
       </div>
@@ -134,6 +136,7 @@ function ActivityChart({ data }: { data: UsageData }) {
 }
 
 function ModelBreakdown({ data }: { data: UsageData }) {
+  const { t } = useTranslation()
   const models = useMemo(() => {
     return Object.entries(data.modelUsage)
       .map(([model, usage]) => ({
@@ -155,13 +158,13 @@ function ModelBreakdown({ data }: { data: UsageData }) {
 
   return (
     <div className="bg-surface-100 border border-border-subtle rounded-xl p-4">
-      <span className="text-xs font-medium text-text-secondary">Model breakdown</span>
+      <span className="text-xs font-medium text-text-secondary">{t('usagePanel.modelBreakdown.title')}</span>
       <div className="mt-3 space-y-3">
         {models.map((m) => (
           <div key={m.model}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs text-text-primary font-medium">{m.name}</span>
-              <span className="text-[11px] text-text-tertiary">{formatNumber(m.total)} tokens</span>
+              <span className="text-[11px] text-text-tertiary">{formatNumber(m.total)} {t('usagePanel.modelBreakdown.tokens')}</span>
             </div>
             <div className="h-2 bg-surface-200 rounded-full overflow-hidden">
               <div
@@ -181,6 +184,7 @@ function ModelBreakdown({ data }: { data: UsageData }) {
 }
 
 function HourGrid({ hourCounts }: { hourCounts: Record<string, number> }) {
+  const { t } = useTranslation()
   const maxCount = useMemo(() => {
     const values = Object.values(hourCounts)
     return values.length > 0 ? Math.max(...values, 1) : 1
@@ -188,7 +192,7 @@ function HourGrid({ hourCounts }: { hourCounts: Record<string, number> }) {
 
   return (
     <div className="bg-surface-100 border border-border-subtle rounded-xl p-4">
-      <span className="text-xs font-medium text-text-secondary">Activity by hour</span>
+      <span className="text-xs font-medium text-text-secondary">{t('usagePanel.hourGrid.title')}</span>
       <div className="mt-3 grid grid-cols-12 gap-1">
         {Array.from({ length: 24 }, (_, h) => {
           const count = hourCounts[String(h)] ?? 0
@@ -202,7 +206,7 @@ function HourGrid({ hourCounts }: { hourCounts: Record<string, number> }) {
                   opacity: Math.max(0.08, intensity * 0.9),
                   transition: 'opacity 0.2s'
                 }}
-                title={`${h}:00 — ${count.toLocaleString()} messages`}
+                title={`${h}:00 — ${count.toLocaleString()} ${t('usagePanel.hourGrid.messages')}`}
               />
               {h % 3 === 0 && (
                 <span className="text-[8px] text-text-tertiary">{h}</span>
@@ -216,6 +220,7 @@ function HourGrid({ hourCounts }: { hourCounts: Record<string, number> }) {
 }
 
 export function UsagePanel() {
+  const { t } = useTranslation()
   const [data, setData] = useState<UsageData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -225,13 +230,13 @@ export function UsagePanel() {
     setError(null)
     try {
       if (!window.electronAPI?.getUsageStats) {
-        setError('Usage stats not available outside Electron')
+        setError(t('usagePanel.error.notAvailable'))
         return
       }
       const stats = await window.electronAPI.getUsageStats()
       setData(stats)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load usage data')
+      setError(err instanceof Error ? err.message : t('usagePanel.error.loadFailed'))
     } finally {
       setLoading(false)
     }
@@ -244,7 +249,7 @@ export function UsagePanel() {
   if (loading && !data) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <span className="text-sm text-text-tertiary">Loading usage data...</span>
+        <span className="text-sm text-text-tertiary">{t('usagePanel.loading')}</span>
       </div>
     )
   }
@@ -257,7 +262,7 @@ export function UsagePanel() {
           onClick={fetchData}
           className="text-xs text-accent hover:text-accent-hover transition-colors"
         >
-          Retry
+          {t('usagePanel.retry')}
         </button>
       </div>
     )
@@ -270,12 +275,12 @@ export function UsagePanel() {
       <div className="max-w-3xl mx-auto p-6 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-text-primary">Usage</h2>
+          <h2 className="text-sm font-semibold text-text-primary">{t('usagePanel.title')}</h2>
           <button
             onClick={fetchData}
             disabled={loading}
             className="p-1.5 rounded-md hover:bg-surface-200 text-text-secondary hover:text-text-primary transition-colors disabled:opacity-50"
-            title="Refresh"
+            title={t('usagePanel.refresh.tooltip')}
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className={loading ? 'animate-spin' : ''}>
               <path
@@ -298,24 +303,24 @@ export function UsagePanel() {
         {/* Stat cards */}
         <div className="grid grid-cols-4 gap-3">
           <StatCard
-            label="Est. Cost"
+            label={t('usagePanel.statCards.estimatedCost.label')}
             value={formatCost(data.estimatedCost)}
-            sub="all time"
+            sub={t('usagePanel.statCards.allTime')}
           />
           <StatCard
-            label="Tokens"
+            label={t('usagePanel.statCards.tokens.label')}
             value={formatNumber(data.totalTokens)}
-            sub="all time"
+            sub={t('usagePanel.statCards.allTime')}
           />
           <StatCard
-            label="Sessions"
+            label={t('usagePanel.statCards.sessions.label')}
             value={data.totalSessions.toLocaleString()}
-            sub="total"
+            sub={t('usagePanel.statCards.total')}
           />
           <StatCard
-            label="Messages"
+            label={t('usagePanel.statCards.messages.label')}
             value={formatNumber(data.totalMessages)}
-            sub="total"
+            sub={t('usagePanel.statCards.total')}
           />
         </div>
 

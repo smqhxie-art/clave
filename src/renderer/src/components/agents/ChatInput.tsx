@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline'
 
 interface ChatInputProps {
@@ -7,6 +8,7 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ onSend, disabled }: ChatInputProps) {
+  const { t } = useTranslation()
   const [value, setValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -43,7 +45,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Send a message..."
+          placeholder={t('agent.chat.input.placeholder')}
           disabled={disabled}
           rows={1}
           className="flex-1 bg-transparent text-sm text-text-primary placeholder:text-text-tertiary outline-none resize-none py-1.5 max-h-40"

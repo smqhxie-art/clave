@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react'
+import i18n from '../../i18n'
 
 interface Props {
   sessionId: string
@@ -33,7 +34,7 @@ export class TerminalErrorBoundary extends Component<Props, State> {
             <path d="M12 8v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             <circle cx="12" cy="16" r="1" fill="currentColor" />
           </svg>
-          <span className="text-xs">Terminal failed to load</span>
+          <span className="text-xs">{i18n.t('terminal.error.loadFailed')}</span>
           <span className="text-xs text-text-tertiary/60 max-w-xs text-center truncate">
             {this.state.error}
           </span>

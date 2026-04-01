@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { motion, AnimatePresence } from 'framer-motion'
 import { type GroupTerminalColor, type GroupTerminalIcon, GROUP_TERMINAL_ICONS } from '../../store/session-store'
@@ -74,6 +75,7 @@ export function GroupCommandDialog({
   initialCwd = null,
   initialIcon = 'terminal'
 }: GroupCommandDialogProps) {
+  const { t } = useTranslation()
   const [command, setCommand] = useState(initialCommand ?? '')
   const [mode, setMode] = useState<'prefill' | 'auto'>(initialMode)
   const [color, setColor] = useState<GroupTerminalColor>(initialColor)
@@ -134,10 +136,10 @@ export function GroupCommandDialog({
                 <div className="bg-surface-0 rounded-xl border border-border shadow-2xl overflow-hidden">
                   <div className="px-4 pt-4 pb-3">
                     <DialogPrimitive.Title className="text-[13px] font-semibold text-text-primary">
-                      {onDelete ? 'Edit terminal' : 'Add terminal'}
+                      {onDelete ? t('groupCommand.title.edit') : t('groupCommand.title.add')}
                     </DialogPrimitive.Title>
                     <DialogPrimitive.Description className="mt-1 text-xs text-text-secondary">
-                      Configure a terminal for this group.
+                      {t('groupCommand.description')}
                     </DialogPrimitive.Description>
 
                     {/* Folder picker */}
@@ -145,14 +147,14 @@ export function GroupCommandDialog({
                       type="button"
                       onClick={handlePickFolder}
                       className="mt-3 w-full h-8 px-3 rounded-lg bg-surface-100 border border-border-subtle flex items-center gap-2 text-xs hover:bg-surface-200 transition-colors group"
-                      title={cwd ?? 'Select folder'}
+                      title={cwd ?? t('groupCommand.folderPicker.tooltip')}
                     >
                       <FolderIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
                       <span className="flex-1 min-w-0 truncate text-left text-text-primary">
-                        {folderName ?? 'Select folder...'}
+                        {folderName ?? t('groupCommand.folderPicker.placeholder')}
                       </span>
                       <span className="text-[10px] text-text-tertiary group-hover:text-text-secondary flex-shrink-0">
-                        Change
+                        {t('groupCommand.folderPicker.change')}
                       </span>
                     </button>
 
@@ -168,12 +170,12 @@ export function GroupCommandDialog({
                           handleSave()
                         }
                       }}
-                      placeholder="e.g., npm run dev (optional)"
+                      placeholder={t('groupCommand.commandInput.placeholder')}
                       className="mt-2 w-full h-8 px-3 rounded-lg bg-surface-100 border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary outline-none focus:ring-1 focus:ring-accent transition-colors"
                     />
 
                     <div className="mt-3 flex items-center gap-3">
-                      <span className="text-xs text-text-secondary">Mode:</span>
+                      <span className="text-xs text-text-secondary">{t('groupCommand.mode.label')}</span>
                       <div className="flex rounded-lg overflow-hidden border border-border-subtle">
                         <button
                           type="button"
@@ -184,7 +186,7 @@ export function GroupCommandDialog({
                               : 'bg-surface-100 text-text-tertiary hover:text-text-secondary'
                           }`}
                         >
-                          Pre-fill
+                          {t('groupCommand.mode.prefill')}
                         </button>
                         <button
                           type="button"
@@ -195,14 +197,14 @@ export function GroupCommandDialog({
                               : 'bg-surface-100 text-text-tertiary hover:text-text-secondary'
                           }`}
                         >
-                          Auto-execute
+                          {t('groupCommand.mode.autoExecute')}
                         </button>
                       </div>
                     </div>
 
                     {/* Icon picker */}
                     <div className="mt-3 flex flex-col gap-2">
-                      <span className="text-xs text-text-secondary">Icon:</span>
+                      <span className="text-xs text-text-secondary">{t('groupCommand.icon.label')}</span>
                       <div className="flex items-center gap-1 flex-wrap">
                         {GROUP_TERMINAL_ICONS.map((iconName) => {
                           const IconComp = ICON_COMPONENTS[iconName]
@@ -227,7 +229,7 @@ export function GroupCommandDialog({
                     </div>
 
                     <div className="mt-3 flex flex-col gap-2">
-                      <span className="text-xs text-text-secondary">Color:</span>
+                      <span className="text-xs text-text-secondary">{t('groupCommand.color.label')}</span>
                       <ColorPicker
                         value={color}
                         onChange={(c) => setColor(c ?? 'blue')}
@@ -242,7 +244,7 @@ export function GroupCommandDialog({
                         onClick={onDelete}
                         className="flex-1 py-2.5 text-[13px] font-medium text-red-400 hover:text-red-300 hover:bg-surface-100 transition-colors border-r border-border-subtle"
                       >
-                        Delete
+                        {t('groupCommand.delete')}
                       </button>
                     )}
                     <button
@@ -250,14 +252,14 @@ export function GroupCommandDialog({
                       onClick={onCancel}
                       className="flex-1 py-2.5 text-[13px] font-medium text-text-secondary hover:text-text-primary hover:bg-surface-100 transition-colors border-r border-border-subtle"
                     >
-                      Cancel
+                      {t('groupCommand.cancel')}
                     </button>
                     <button
                       type="button"
                       onClick={handleSave}
                       className="flex-1 py-2.5 text-[13px] font-medium text-accent hover:brightness-110 hover:bg-surface-100 transition-colors outline-none"
                     >
-                      Save
+                      {t('groupCommand.save')}
                     </button>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, nativeImage, nativeTheme } from 'electron'
+import { app, BrowserWindow, shell, nativeImage, nativeTheme, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { registerIpcHandlers } from './ipc-handlers'
@@ -11,6 +11,7 @@ import { locationManager } from './location-manager'
 import { openclawClient } from './openclaw-client'
 import { preferencesManager } from './preferences-manager'
 import { cleanupClaveWatchers } from './ipc-handlers/clave-file-handlers'
+import { initAppMenu, setMenuLanguage } from './app-menu'
 
 function createWindow(): void {
   const savedIcon = preferencesManager.get('appIcon')
@@ -78,6 +79,13 @@ app.whenReady().then(() => {
   registerIpcHandlers()
   initNotificationManager()
   applyPersistedIcon()
+
+  // Initialize app menu with persisted language preference
+  ipcMain.on('menu:set-language', (_event, lang: string) => {
+    setMenuLanguage(lang)
+  })
+  initAppMenu()
+
   createWindow()
   initAutoUpdater()
 

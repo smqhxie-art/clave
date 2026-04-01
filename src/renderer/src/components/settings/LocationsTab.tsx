@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocationStore } from '../../store/location-store'
 import { AddLocationDialog } from './AddLocationDialog'
 import { PlusIcon, TrashIcon, ArrowPathIcon, SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline'
 import { cn } from '../../lib/utils'
 import type { Location } from '../../../../shared/remote-types'
 
-const statusLabels: Record<string, { label: string; color: string }> = {
-  connected: { label: 'Connected', color: 'text-green-500' },
-  disconnected: { label: 'Disconnected', color: 'text-text-tertiary' },
-  connecting: { label: 'Connecting...', color: 'text-amber-500' },
-  error: { label: 'Error', color: 'text-red-500' }
-}
-
 function LocationCard({ location }: { location: Location }) {
+  const { t } = useTranslation()
   const removeLocation = useLocationStore((s) => s.removeLocation)
   const setLocationStatus = useLocationStore((s) => s.setLocationStatus)
   const isLocal = location.type === 'local'
+  const statusLabels: Record<string, { label: string; color: string }> = {
+    connected: { label: t('locations.status.connected'), color: 'text-green-500' },
+    disconnected: { label: t('locations.status.disconnected'), color: 'text-text-tertiary' },
+    connecting: { label: t('locations.status.connecting'), color: 'text-amber-500' },
+    error: { label: t('locations.status.error'), color: 'text-red-500' }
+  }
   const statusInfo = statusLabels[location.status] || statusLabels.disconnected
 
   const handleConnect = async () => {
@@ -49,7 +50,7 @@ function LocationCard({ location }: { location: Location }) {
           <span className="text-sm font-medium text-text-primary truncate">{location.name}</span>
           {isLocal && (
             <span className="text-[10px] font-medium text-text-tertiary bg-surface-200 rounded px-1.5 py-0.5">
-              LOCAL
+              {t('locations.badge.local')}
             </span>
           )}
         </div>
@@ -63,7 +64,7 @@ function LocationCard({ location }: { location: Location }) {
           <button
             onClick={handleConnect}
             className="p-1.5 rounded-lg hover:bg-surface-200 text-text-tertiary hover:text-text-primary transition-colors"
-            title={location.status === 'connected' ? 'Disconnect' : 'Connect'}
+            title={location.status === 'connected' ? t('locations.tooltip.disconnect') : t('locations.tooltip.connect')}
           >
             {location.status === 'connected' ? (
               <SignalSlashIcon className="w-4 h-4" />
@@ -76,7 +77,7 @@ function LocationCard({ location }: { location: Location }) {
           <button
             onClick={() => removeLocation(location.id)}
             className="p-1.5 rounded-lg hover:bg-surface-200 text-text-tertiary hover:text-red-400 transition-colors"
-            title="Remove location"
+            title={t('locations.tooltip.remove')}
           >
             <TrashIcon className="w-4 h-4" />
           </button>
@@ -87,6 +88,7 @@ function LocationCard({ location }: { location: Location }) {
 }
 
 export function LocationsTab() {
+  const { t } = useTranslation()
   const locations = useLocationStore((s) => s.locations)
   const loaded = useLocationStore((s) => s.loaded)
   const loadLocations = useLocationStore((s) => s.loadLocations)
@@ -99,10 +101,10 @@ export function LocationsTab() {
   return (
     <div>
       <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-widest mb-3">
-        Locations
+        {t('locations.section.title')}
       </h3>
       <p className="text-xs text-text-tertiary mb-4">
-        Manage local and remote machines for terminal sessions and agents.
+        {t('locations.section.description')}
       </p>
 
       <div className="space-y-2 mb-4">
@@ -116,7 +118,7 @@ export function LocationsTab() {
         className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-dashed border-border-subtle text-sm text-text-secondary hover:text-text-primary hover:border-accent/40 transition-colors"
       >
         <PlusIcon className="w-4 h-4" />
-        Add Location
+        {t('locations.button.add')}
       </button>
 
       {showAddDialog && <AddLocationDialog onClose={() => setShowAddDialog(false)} />}

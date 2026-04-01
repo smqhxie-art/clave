@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -11,7 +12,9 @@ interface ConfirmDialogProps {
   confirmLabel?: string
 }
 
-export function ConfirmDialog({ isOpen, onConfirm, onCancel, title, message, confirmLabel = 'Delete' }: ConfirmDialogProps) {
+export function ConfirmDialog({ isOpen, onConfirm, onCancel, title, message, confirmLabel }: ConfirmDialogProps) {
+  const { t } = useTranslation()
+  const effectiveConfirmLabel = confirmLabel ?? t('confirmDialog.defaultConfirmLabel')
   const confirmRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -61,7 +64,7 @@ export function ConfirmDialog({ isOpen, onConfirm, onCancel, title, message, con
                       onClick={onCancel}
                       className="flex-1 py-2.5 text-[13px] font-medium text-text-secondary hover:text-text-primary hover:bg-surface-100 transition-colors border-r border-border-subtle"
                     >
-                      Cancel
+                      {t('confirmDialog.cancel')}
                     </button>
                     <button
                       ref={confirmRef}
@@ -69,7 +72,7 @@ export function ConfirmDialog({ isOpen, onConfirm, onCancel, title, message, con
                       onClick={onConfirm}
                       className="flex-1 py-2.5 text-[13px] font-medium text-red-400 hover:text-red-300 hover:bg-surface-100 transition-colors outline-none"
                     >
-                      {confirmLabel}
+                      {effectiveConfirmLabel}
                     </button>
                   </div>
                 </div>

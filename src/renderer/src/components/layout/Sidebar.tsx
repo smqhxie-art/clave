@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   useSessionStore,
   GROUP_TERMINAL_COLORS,
@@ -93,6 +94,7 @@ function shouldShowGapBefore(
 
 
 export function Sidebar() {
+  const { t } = useTranslation()
   const sessions = useSessionStore((s) => s.sessions)
   const selectedSessionIds = useSessionStore((s) => s.selectedSessionIds)
   const focusedSessionId = useSessionStore((s) => s.focusedSessionId)
@@ -576,12 +578,12 @@ export function Sidebar() {
         y: e.clientY,
         items: [
           {
-            label: 'Edit',
+            label: t('sidebar.contextMenu.edit'),
             icon: <PencilSquareIcon className="w-3.5 h-3.5" />,
             onClick: () => setTerminalDialogState({ groupId, terminalId })
           },
           {
-            label: 'Delete',
+            label: t('sidebar.contextMenu.delete'),
             icon: <TrashIcon className="w-3.5 h-3.5" />,
             danger: true,
             onClick: () => {
@@ -594,7 +596,7 @@ export function Sidebar() {
         ]
       })
     },
-    [groups, removeGroupTerminal]
+    [groups, removeGroupTerminal, t]
   )
 
   const hideAgentSession = useSessionStore((s) => s.hideAgentSession)
@@ -682,17 +684,17 @@ export function Sidebar() {
       if (session?.sessionType === 'agent') {
         const items: ContextMenuState['items'] = [
           {
-            label: 'Rename',
+            label: t('sidebar.contextMenu.rename'),
             icon: <PencilSquareIcon className="w-3.5 h-3.5" />,
             onClick: () => setRenamingId(sessionId)
           },
           {
-            label: 'Hide from sidebar',
+            label: t('sidebar.contextMenu.hideFromSidebar'),
             icon: <XMarkIcon className="w-3.5 h-3.5" />,
             onClick: () => hideAgentSession(sessionId)
           },
           {
-            label: 'Clear messages',
+            label: t('sidebar.contextMenu.clearMessages'),
             icon: <TrashIcon className="w-3.5 h-3.5" />,
             onClick: () => {
               if (session.agentId) useAgentStore.getState().clearMessages(session.agentId)
@@ -705,12 +707,12 @@ export function Sidebar() {
 
       const items: ContextMenuState['items'] = [
         {
-          label: 'Rename',
+          label: t('sidebar.contextMenu.rename'),
           icon: <PencilSquareIcon className="w-3.5 h-3.5" />,
           onClick: () => setRenamingId(sessionId)
         },
         {
-          label: 'Duplicate',
+          label: t('sidebar.contextMenu.duplicate'),
           icon: <DocumentDuplicateIcon className="w-3.5 h-3.5" />,
           onClick: () => handleDuplicateSession(sessionId)
         }
@@ -718,21 +720,21 @@ export function Sidebar() {
       const state = useSessionStore.getState()
       if (state.selectedSessionIds.length >= 1) {
         items.push({
-          label: 'Group',
+          label: t('sidebar.contextMenu.group'),
           icon: <Squares2X2Icon className="w-3.5 h-3.5" />,
           shortcut: '\u2318G',
           onClick: () => createGroup(state.selectedSessionIds)
         })
       }
       items.push({
-        label: 'Delete',
+        label: t('sidebar.contextMenu.delete'),
         icon: <TrashIcon className="w-3.5 h-3.5" />,
         danger: true,
         onClick: () => handleDeleteSession(sessionId)
       })
       setContextMenu({ x: e.clientX, y: e.clientY, items })
     },
-    [sessions, createGroup, handleDeleteSession, handleDuplicateSession, hideAgentSession]
+    [sessions, createGroup, handleDeleteSession, handleDuplicateSession, hideAgentSession, t]
   )
 
   const handleGroupContextMenu = useCallback(
@@ -754,33 +756,33 @@ export function Sidebar() {
           existingPin
             ? isPinnedOutOfSync(groupId)
               ? {
-                  label: 'Re-sync pin',
+                  label: t('sidebar.contextMenu.resyncPin'),
                   icon: <BookmarkIcon className="w-3.5 h-3.5" />,
                   onClick: () => resyncPinnedGroup(groupId)
                 }
               : null
             : {
-                label: 'Pin group',
+                label: t('sidebar.contextMenu.pinGroup'),
                 icon: <BookmarkIcon className="w-3.5 h-3.5" />,
                 onClick: () => pinGroupFromCurrent(groupId)
               },
           {
-            label: 'Rename',
+            label: t('sidebar.contextMenu.rename'),
             icon: <PencilSquareIcon className="w-3.5 h-3.5" />,
             onClick: () => setRenamingId(groupId)
           },
           {
-            label: 'Add terminal',
+            label: t('sidebar.contextMenu.addTerminal'),
             icon: <CommandLineIcon className="w-3.5 h-3.5" />,
             onClick: () => setTerminalDialogState({ groupId, terminalId: null })
           },
           {
-            label: 'Ungroup',
+            label: t('sidebar.contextMenu.ungroup'),
             icon: <FolderMinusIcon className="w-3.5 h-3.5" />,
             onClick: () => ungroupSessions(groupId)
           },
           {
-            label: 'Delete',
+            label: t('sidebar.contextMenu.delete'),
             icon: <TrashIcon className="w-3.5 h-3.5" />,
             danger: true,
             onClick: () => handleDeleteGroup(groupId)
@@ -788,7 +790,7 @@ export function Sidebar() {
         ].filter((item): item is NonNullable<typeof item> => item !== null)
       })
     },
-    [groups, ungroupSessions, handleDeleteGroup, setGroupColor]
+    [groups, ungroupSessions, handleDeleteGroup, setGroupColor, t]
   )
 
   const handleFileTabContextMenu = useCallback(
@@ -801,20 +803,20 @@ export function Sidebar() {
         y: e.clientY,
         items: [
           {
-            label: 'Rename',
+            label: t('sidebar.contextMenu.rename'),
             icon: <PencilSquareIcon className="w-3.5 h-3.5" />,
             onClick: () => setRenamingId(fileTabId)
           },
           {
-            label: 'Copy Path',
+            label: t('sidebar.contextMenu.copyPath'),
             onClick: () => navigator.clipboard.writeText(fileTab.filePath)
           },
           {
-            label: 'Reveal in Finder',
+            label: t('sidebar.contextMenu.revealInFinder'),
             onClick: () => window.electronAPI?.showItemInFolder(fileTab.filePath)
           },
           {
-            label: 'Close',
+            label: t('sidebar.contextMenu.close'),
             icon: <XMarkIcon className="w-3.5 h-3.5" />,
             danger: true,
             onClick: () => removeFileTab(fileTabId)
@@ -822,7 +824,7 @@ export function Sidebar() {
         ]
       })
     },
-    [fileTabs, removeFileTab]
+    [fileTabs, removeFileTab, t]
   )
 
   // Finder-style session click: Click=single, Cmd=toggle, Shift=range, Cmd+Shift=range-add
@@ -946,7 +948,7 @@ export function Sidebar() {
             ref={searchInputRef}
             data-sidebar-search
             type="text"
-            placeholder="Search sessions & Claude history..."
+            placeholder={t('sidebar.search.placeholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -962,7 +964,7 @@ export function Sidebar() {
           onClick={() => setResetConfirmOpen(true)}
           disabled={sessions.length === 0}
           className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-surface-200 text-text-tertiary hover:text-text-primary transition-colors flex-shrink-0 disabled:opacity-30 disabled:pointer-events-none"
-          title="Reset sessions"
+          title={t('sidebar.resetSessions.tooltip')}
           style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
         >
           <ArrowPathIcon className="w-3.5 h-3.5" />
@@ -987,7 +989,7 @@ export function Sidebar() {
           <>
             {/* Sessions section */}
             <SectionHeading
-              title="当前活跃"
+              title={t('sidebar.sections.activeSessions')}
               collapsed={sessionsCollapsed}
               onToggle={() => setSessionsCollapsed((c) => !c)}
               actions={
@@ -1023,7 +1025,7 @@ export function Sidebar() {
                 {filteredSessions ? (
                   filteredSessions.length === 0 ? (
                     <div className="px-3 py-6 text-center text-xs text-text-tertiary">
-                      No matching sessions
+                      {t('sidebar.search.noResults')}
                     </div>
                   ) : (
                     filteredSessions.map((session) => (
@@ -1226,7 +1228,7 @@ export function Sidebar() {
         <HistorySidebarSection />
 
         {/* Workflows section */}
-        <SectionHeading title="Workflows" collapsed={boardCollapsed} onToggle={() => setBoardCollapsed((c) => !c)} />
+        <SectionHeading title={t('sidebar.sections.workflows')} collapsed={boardCollapsed} onToggle={() => setBoardCollapsed((c) => !c)} />
         <TaskQueueSection collapsed={boardCollapsed} />
       </ScrollArea>
 
@@ -1247,8 +1249,8 @@ export function Sidebar() {
       {/* Delete session confirmation */}
       <ConfirmDialog
         isOpen={deleteConfirmSessionId !== null}
-        title="Delete session"
-        message="Are you sure you want to delete this session? This will terminate the process."
+        title={t('sidebar.dialog.deleteSession.title')}
+        message={t('sidebar.dialog.deleteSession.message')}
         onConfirm={() => {
           if (deleteConfirmSessionId) handleDeleteSession(deleteConfirmSessionId)
           setDeleteConfirmSessionId(null)
@@ -1259,11 +1261,11 @@ export function Sidebar() {
       {/* Reset sessions confirmation */}
       <ConfirmDialog
         isOpen={resetConfirmOpen}
-        title="Reset sessions"
+        title={t('sidebar.dialog.resetSessions.title')}
         message={
           defaultTemplateName
-            ? `Close all sessions and load "${defaultTemplateName}" template?`
-            : 'Close all sessions and start fresh?'
+            ? t('sidebar.dialog.resetSessions.messageWithTemplate', { name: defaultTemplateName })
+            : t('sidebar.dialog.resetSessions.messageBlank')
         }
         onConfirm={handleResetSessions}
         onCancel={() => setResetConfirmOpen(false)}
@@ -1376,6 +1378,7 @@ function PinnedSection({
   draggedGroupId: string | null
   isFileDragOver: boolean
 }) {
+  const { t } = useTranslation()
   const pinnedGroups = usePinnedStore((s) => s.pinnedGroups)
   const pinnedCollapsed = usePinnedStore((s) => s.pinnedCollapsed)
   const togglePinnedCollapsed = usePinnedStore((s) => s.togglePinnedCollapsed)
@@ -1388,23 +1391,23 @@ function PinnedSection({
         y: e.clientY,
         items: [
           {
-            label: 'Rename',
+            label: t('sidebar.contextMenu.renamePinned'),
             icon: <PencilSquareIcon className="w-3.5 h-3.5" />,
             onClick: () => {
               const pg = usePinnedStore.getState().pinnedGroups.find((p) => p.id === pinnedId)
-              const newName = window.prompt('Rename pinned group', pg?.name ?? '')
+              const newName = window.prompt(t('sidebar.pinned.renamePrompt'), pg?.name ?? '')
               if (newName && newName.trim()) {
                 usePinnedStore.getState().renamePinnedGroup(pinnedId, newName.trim())
               }
             }
           },
           {
-            label: 'Export as .clave',
+            label: t('sidebar.contextMenu.exportClave'),
             icon: <ArrowDownTrayIcon className="w-3.5 h-3.5" />,
             onClick: () => setExportDialogPinnedId(pinnedId)
           },
           {
-            label: 'Remove Pin',
+            label: t('sidebar.contextMenu.removePin'),
             icon: <TrashIcon className="w-3.5 h-3.5" />,
             danger: true,
             onClick: () => removePinnedGroupWithCleanup(pinnedId)
@@ -1423,7 +1426,7 @@ function PinnedSection({
   return (
     <>
       <SectionHeading
-        title="Pinned"
+        title={t('sidebar.sections.pinned')}
         collapsed={pinnedCollapsed}
         onToggle={togglePinnedCollapsed}
       />

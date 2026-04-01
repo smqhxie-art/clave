@@ -1,4 +1,5 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 import { useGitStatus } from '../../hooks/use-git-status'
 import { ConfirmDialog } from '../ui/ConfirmDialog'
@@ -47,6 +48,7 @@ function RepoSection({
   refresh: () => void
   fillHeight?: boolean
 }) {
+  const { t } = useTranslation()
   const gitViewMode = useSessionStore((s) => s.gitViewMode)
   const setDiffPreview = useSessionStore((s) => s.setDiffPreview)
   const diffPreview = useSessionStore((s) => s.diffPreview)
@@ -271,14 +273,14 @@ function RepoSection({
     const name = file.path.includes('/') ? file.path.split('/').pop()! : file.path
     setConfirmDiscard({
       files: [{ path: file.path, status: file.status, staged: file.staged }],
-      label: `Discard changes to ${name}? This cannot be undone.`
+      label: t('git.discard.confirmSingleFile', { name })
     })
   }, [])
 
   const promptDiscardAll = useCallback((files: GitFileStatus[]) => {
     setConfirmDiscard({
       files: files.map((f) => ({ path: f.path, status: f.status, staged: f.staged })),
-      label: `Discard all changes in ${files.length} file${files.length === 1 ? '' : 's'}? This cannot be undone.`
+      label: t('git.discard.confirmMultipleFiles', { count: files.length })
     })
   }, [])
 
@@ -298,7 +300,7 @@ function RepoSection({
         {error && <ErrorBanner message={error} />}
         <div className={`${fillHeight ? 'flex-1' : ''} flex items-center justify-center px-3 py-4`}>
           <span className="text-xs text-text-tertiary text-center">
-            {relativeFilterPrefix ? 'No changes in this folder' : 'Working tree clean'}
+            {relativeFilterPrefix ? t('git.status.noChangesInFolder') : t('git.status.workingTreeClean')}
           </span>
         </div>
         {(status.ahead > 0 || status.behind > 0) && (
@@ -323,18 +325,18 @@ function RepoSection({
       {error && <ErrorBanner message={error} />}
       {relativeFilterPrefix && (
         <div className="px-3 py-1 text-[10px] text-text-tertiary border-b border-border-subtle flex-shrink-0">
-          Filtered to: {relativeFilterPrefix}
+          {t('git.status.filteredTo', { prefix: relativeFilterPrefix })}
         </div>
       )}
       <div className={`${fillHeight ? 'flex-1 overflow-y-auto' : ''}`}>
         {staged.length > 0 && (
           <>
             <SectionHeader
-              label="Staged"
+              label={t('git.section.staged')}
               count={staged.length}
-              action="Unstage All"
+              action={t('git.action.unstageAll')}
               onAction={unstageAll}
-              discardAction="Discard All"
+              discardAction={t('git.action.discardAll')}
               onDiscardAction={() => promptDiscardAll(staged)}
               disabled={operating}
             />
@@ -374,11 +376,11 @@ function RepoSection({
         {unstaged.length > 0 && (
           <>
             <SectionHeader
-              label="Modified"
+              label={t('git.section.modified')}
               count={unstaged.length}
-              action="Stage All"
+              action={t('git.action.stageAll')}
               onAction={() => stageAll(unstaged)}
-              discardAction="Discard All"
+              discardAction={t('git.action.discardAll')}
               onDiscardAction={() => promptDiscardAll(unstaged)}
               disabled={operating}
             />
@@ -418,11 +420,11 @@ function RepoSection({
         {untracked.length > 0 && (
           <>
             <SectionHeader
-              label="Untracked"
+              label={t('git.section.untracked')}
               count={untracked.length}
-              action="Stage All"
+              action={t('git.action.stageAll')}
               onAction={() => stageAll(untracked)}
-              discardAction="Discard All"
+              discardAction={t('git.action.discardAll')}
               onDiscardAction={() => promptDiscardAll(untracked)}
               disabled={operating}
             />
@@ -472,7 +474,7 @@ function RepoSection({
       />
       <ConfirmDialog
         isOpen={confirmDiscard !== null}
-        title="Discard changes"
+        title={t('git.discard.dialogTitle')}
         message={confirmDiscard?.label ?? ''}
         onConfirm={executeDiscard}
         onCancel={() => setConfirmDiscard(null)}
@@ -498,6 +500,7 @@ export function GitStatusPanel({
   externalStatus?: GitStatusResult | null
   externalRefresh?: () => void
 }) {
+  const { t } = useTranslation()
   const focusedSessionId = useSessionStore((s) => s.focusedSessionId)
   const gitPanelMode = useSessionStore((s) => s.gitPanelMode)
   const internal = useGitStatus(externalStatus !== undefined ? null : cwd, isActive)
@@ -509,7 +512,7 @@ export function GitStatusPanel({
     return (
       <div className="flex-1 flex items-center justify-center px-3">
         <span className="text-xs text-text-tertiary text-center">
-          Focus a session to view git status
+          {t('git.status.focusSessionHint')}
         </span>
       </div>
     )
@@ -518,7 +521,7 @@ export function GitStatusPanel({
   if (loading && !status) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <span className="text-xs text-text-tertiary">Loading...</span>
+        <span className="text-xs text-text-tertiary">{t('git.status.loading')}</span>
       </div>
     )
   }
@@ -526,7 +529,7 @@ export function GitStatusPanel({
   if (status && !status.isRepo) {
     return (
       <div className="flex-1 flex items-center justify-center px-3">
-        <span className="text-xs text-text-tertiary text-center">Not a git repository</span>
+        <span className="text-xs text-text-tertiary text-center">{t('git.status.notARepo')}</span>
       </div>
     )
   }
@@ -709,6 +712,7 @@ export function MultiRepoGitPanel({
   rootPath?: string | null
   refresh: () => void
 }) {
+  const { t } = useTranslation()
   const [nestedDocked, setNestedDocked] = useState(false)
   const [selectedRepoPaths, setSelectedRepoPaths] = useState<Set<string>>(new Set())
 
@@ -760,7 +764,7 @@ export function MultiRepoGitPanel({
             <button
               className="p-0.5 rounded text-text-tertiary opacity-0 group-hover/sep:opacity-100 hover:text-text-primary hover:bg-surface-200 transition-all flex-shrink-0 mx-1"
               onClick={() => setNestedDocked(true)}
-              title="Dock nested repos"
+              title={t('git.multiRepo.dockNested')}
             >
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                 <path d="M2.5 4L5 7l2.5-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
@@ -808,12 +812,12 @@ export function MultiRepoGitPanel({
           <button
             className="flex items-center gap-1.5 px-2 py-1 text-[10px] font-medium rounded bg-surface-100 hover:bg-surface-200 text-text-secondary hover:text-text-primary transition-colors w-full"
             onClick={() => setNestedDocked(false)}
-            title="Restore nested repos"
+            title={t('git.multiRepo.restoreNested')}
           >
             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" className="flex-shrink-0">
               <path d="M2 5.5L4 3l2 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span>{nestedRepos.length} nested repo{nestedRepos.length !== 1 ? 's' : ''}</span>
+            <span>{t('git.multiRepo.nestedRepoCount', { count: nestedRepos.length })}</span>
             {nestedChangeCount > 0 && (
               <span className="bg-surface-200 text-text-tertiary rounded-full px-1.5 min-w-[16px] text-center text-[9px]">
                 {nestedChangeCount}

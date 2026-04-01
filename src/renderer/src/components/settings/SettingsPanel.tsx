@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { type Theme, type AppIcon, useSessionStore } from '../../store/session-store'
 import { useTemplateStore } from '../../store/template-store'
 import { useUserStore, USER_ICONS, USER_ICON_COLORS } from '../../store/user-store'
@@ -32,31 +33,28 @@ function IconPreview({ bg, face, depthBack, depthLight, depthDark }: { bg: strin
   )
 }
 
-const appIcons: { id: AppIcon; label: string; colors: { bg: string; face: string; depthBack: string; depthLight: string; depthDark: string } }[] = [
-  { id: 'dark', label: 'Dark', colors: { bg: '#0a0a0a', face: '#ffffff', depthBack: '#2D2D2D', depthLight: '#3A3A3A', depthDark: '#222222' } },
-  { id: 'light', label: 'Light', colors: { bg: '#f5f5f5', face: '#1a1a1a', depthBack: '#555555', depthLight: '#666666', depthDark: '#444444' } },
-  { id: 'claude', label: 'Claude', colors: { bg: '#da7756', face: '#ffffff', depthBack: '#A45A41', depthLight: '#B96549', depthDark: '#914F39' } }
+const appIconColors: { id: AppIcon; colors: { bg: string; face: string; depthBack: string; depthLight: string; depthDark: string } }[] = [
+  { id: 'dark', colors: { bg: '#0a0a0a', face: '#ffffff', depthBack: '#2D2D2D', depthLight: '#3A3A3A', depthDark: '#222222' } },
+  { id: 'light', colors: { bg: '#f5f5f5', face: '#1a1a1a', depthBack: '#555555', depthLight: '#666666', depthDark: '#444444' } },
+  { id: 'claude', colors: { bg: '#da7756', face: '#ffffff', depthBack: '#A45A41', depthLight: '#B96549', depthDark: '#914F39' } }
 ]
 
-const themes: { id: Theme; label: string; colors: { bg: string; surface: string; text: string; border: string } }[] = [
+const themeColors: { id: Theme; colors: { bg: string; surface: string; text: string; border: string } }[] = [
   {
     id: 'dark',
-    label: 'Dark',
     colors: { bg: '#0a0a0a', surface: '#1a1a1a', text: 'rgba(255,255,255,0.9)', border: 'rgba(255,255,255,0.1)' }
   },
   {
     id: 'light',
-    label: 'Light',
     colors: { bg: '#f9f9f9', surface: '#e6e6e6', text: 'rgba(0,0,0,0.85)', border: 'rgba(0,0,0,0.12)' }
   },
   {
     id: 'coffee',
-    label: 'Coffee',
     colors: { bg: '#eeebe5', surface: '#ddd9d1', text: '#1b1610', border: 'rgba(120,100,80,0.15)' }
   }
 ]
 
-function ProfileSection() {
+function ProfileSection({ t }: { t: (key: string) => string }) {
   const name = useUserStore((s) => s.name)
   const avatarIcon = useUserStore((s) => s.avatarIcon)
   const avatarColor = useUserStore((s) => s.avatarColor)
@@ -81,7 +79,7 @@ function ProfileSection() {
   return (
     <section>
       <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-widest mb-3">
-        Profile
+        {t('settings.section.profile')}
       </h3>
       <div className="flex items-start gap-4">
         {/* Avatar preview */}
@@ -113,7 +111,7 @@ function ProfileSection() {
 
           {/* Icon picker */}
           <div>
-            <span className="text-[11px] font-medium text-text-tertiary uppercase tracking-wide">Icon</span>
+            <span className="text-[11px] font-medium text-text-tertiary uppercase tracking-wide">{t('settings.profile.icon')}</span>
             <div className="flex flex-wrap gap-1 mt-1">
               {USER_ICONS.map((iconName) => {
                 const Icon = ICON_MAP[iconName]
@@ -138,7 +136,7 @@ function ProfileSection() {
 
           {/* Color picker */}
           <div>
-            <span className="text-[11px] font-medium text-text-tertiary uppercase tracking-wide">Color</span>
+            <span className="text-[11px] font-medium text-text-tertiary uppercase tracking-wide">{t('settings.profile.color')}</span>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {USER_ICON_COLORS.map((color) => (
                 <button
@@ -160,10 +158,13 @@ function ProfileSection() {
 }
 
 export function SettingsPanel() {
+  const { t } = useTranslation()
   const theme = useSessionStore((s) => s.theme)
   const setTheme = useSessionStore((s) => s.setTheme)
   const appIcon = useSessionStore((s) => s.appIcon)
   const setAppIcon = useSessionStore((s) => s.setAppIcon)
+  const language = useSessionStore((s) => s.language)
+  const setLanguage = useSessionStore((s) => s.setLanguage)
   const sessions = useSessionStore((s) => s.sessions)
 
   const templates = useTemplateStore((s) => s.templates)
@@ -209,22 +210,22 @@ export function SettingsPanel() {
   return (
     <div className="flex-1 overflow-y-auto p-8">
       <div className="max-w-xl">
-        <h2 className="text-lg font-semibold text-text-primary mb-6">Settings</h2>
+        <h2 className="text-lg font-semibold text-text-primary mb-6">{t('settings.title')}</h2>
 
-        <ProfileSection />
+        <ProfileSection t={t} />
 
         <section className="mt-8">
           <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-widest mb-3">
-            Appearance
+            {t('settings.section.appearance')}
           </h3>
           <div className="flex gap-3">
-            {themes.map((t) => (
+            {themeColors.map((th) => (
               <button
-                key={t.id}
-                onClick={() => setTheme(t.id)}
+                key={th.id}
+                onClick={() => setTheme(th.id)}
                 className="flex-1 rounded-xl p-1 transition-all duration-200"
                 style={{
-                  boxShadow: theme === t.id
+                  boxShadow: theme === th.id
                     ? '0 0 0 2px var(--color-accent)'
                     : '0 0 0 1px var(--border-color)',
                   background: 'var(--surface-100)'
@@ -233,41 +234,56 @@ export function SettingsPanel() {
                 {/* Mini preview */}
                 <div
                   className="rounded-lg p-3 mb-2"
-                  style={{ background: t.colors.bg, border: `1px solid ${t.colors.border}` }}
+                  style={{ background: th.colors.bg, border: `1px solid ${th.colors.border}` }}
                 >
                   <div
                     className="h-1.5 w-10 rounded-full mb-2"
-                    style={{ background: t.colors.text, opacity: 0.7 }}
+                    style={{ background: th.colors.text, opacity: 0.7 }}
                   />
                   <div className="flex gap-1.5">
                     <div
                       className="h-6 flex-1 rounded"
-                      style={{ background: t.colors.surface }}
+                      style={{ background: th.colors.surface }}
                     />
                     <div
                       className="h-6 flex-1 rounded"
-                      style={{ background: t.colors.surface }}
+                      style={{ background: th.colors.surface }}
                     />
                   </div>
                   <div
                     className="h-1.5 w-14 rounded-full mt-2"
-                    style={{ background: t.colors.text, opacity: 0.4 }}
+                    style={{ background: th.colors.text, opacity: 0.4 }}
                   />
                 </div>
                 <div className="text-xs font-medium text-text-primary text-center pb-1">
-                  {t.label}
+                  {t(`settings.theme.${th.id}`)}
                 </div>
               </button>
             ))}
+          </div>
+
+          {/* Language selector */}
+          <div className="mt-4">
+            <label className="text-[11px] font-medium text-text-tertiary uppercase tracking-wide block mb-1.5">
+              {t('settings.appearance.language')}
+            </label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as 'en' | 'zh-CN')}
+              className="text-sm bg-surface-200 text-text-primary rounded-lg px-3 py-1.5 outline-none border border-border-subtle focus:border-accent w-full max-w-[200px]"
+            >
+              <option value="en">English</option>
+              <option value="zh-CN">简体中文</option>
+            </select>
           </div>
         </section>
 
         <section className="mt-8">
           <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-widest mb-3">
-            App Icon
+            {t('settings.section.appIcon')}
           </h3>
           <div className="flex gap-3">
-            {appIcons.map((icon) => (
+            {appIconColors.map((icon) => (
               <button
                 key={icon.id}
                 onClick={() => setAppIcon(icon.id)}
@@ -287,11 +303,11 @@ export function SettingsPanel() {
           </div>
         </section>
 
-        <WorkspacesSection />
+        <WorkspacesSection t={t} />
 
         <section className="mt-8">
           <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-widest mb-3">
-            Launch Templates
+            {t('settings.section.launchTemplates')}
           </h3>
 
           {/* Template list */}
@@ -301,7 +317,7 @@ export function SettingsPanel() {
               <button
                 onClick={() => setDefaultTemplate('blank')}
                 className="flex-shrink-0 text-text-tertiary hover:text-accent transition-colors"
-                title={blankIsDefault ? 'Default template' : 'Set as default'}
+                title={blankIsDefault ? t('settings.template.tooltip.default') : t('settings.template.tooltip.setAsDefault')}
               >
                 {blankIsDefault ? (
                   <StarSolid className="w-4 h-4 text-accent" />
@@ -309,30 +325,30 @@ export function SettingsPanel() {
                   <StarOutline className="w-4 h-4" />
                 )}
               </button>
-              <span className="text-sm text-text-primary flex-1">Blank</span>
-              <span className="text-xs text-text-tertiary">No sessions</span>
+              <span className="text-sm text-text-primary flex-1">{t('settings.template.blank')}</span>
+              <span className="text-xs text-text-tertiary">{t('settings.template.noSessions')}</span>
             </div>
 
             {/* User templates */}
-            {templates.map((t) => {
-              const isDefault = defaultTemplateId === t.id
-              const isEditing = editingId === t.id
-              const groupCount = t.groups.length
-              const sessionCount = t.sessions.length
+            {templates.map((tpl) => {
+              const isDefault = defaultTemplateId === tpl.id
+              const isEditing = editingId === tpl.id
+              const groupCount = tpl.groups.length
+              const sessionCount = tpl.sessions.length
               const badge =
                 groupCount > 0
-                  ? `${sessionCount} session${sessionCount !== 1 ? 's' : ''}, ${groupCount} group${groupCount !== 1 ? 's' : ''}`
-                  : `${sessionCount} session${sessionCount !== 1 ? 's' : ''}`
+                  ? t('settings.template.badge.sessionsGroups', { sessionCount, groupCount })
+                  : t('settings.template.badge.sessions', { sessionCount })
 
               return (
                 <div
-                  key={t.id}
+                  key={tpl.id}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-100"
                 >
                   <button
-                    onClick={() => setDefaultTemplate(isDefault ? 'blank' : t.id)}
+                    onClick={() => setDefaultTemplate(isDefault ? 'blank' : tpl.id)}
                     className="flex-shrink-0 text-text-tertiary hover:text-accent transition-colors"
-                    title={isDefault ? 'Unset default' : 'Set as default'}
+                    title={isDefault ? t('settings.template.tooltip.unsetDefault') : t('settings.template.tooltip.setAsDefault')}
                   >
                     {isDefault ? (
                       <StarSolid className="w-4 h-4 text-accent" />
@@ -359,19 +375,19 @@ export function SettingsPanel() {
                   ) : (
                     <span
                       className="text-sm text-text-primary flex-1 cursor-pointer"
-                      onDoubleClick={() => handleStartRename(t.id, t.name)}
-                      title="Double-click to rename"
+                      onDoubleClick={() => handleStartRename(tpl.id, tpl.name)}
+                      title={t('settings.template.tooltip.doubleClickRename')}
                     >
-                      {t.name}
+                      {tpl.name}
                     </span>
                   )}
 
                   <span className="text-xs text-text-tertiary flex-shrink-0">{badge}</span>
 
                   <button
-                    onClick={() => deleteTemplate(t.id)}
+                    onClick={() => deleteTemplate(tpl.id)}
                     className="flex-shrink-0 p-1 rounded hover:bg-surface-200 text-text-tertiary hover:text-red-400 transition-colors"
-                    title="Delete template"
+                    title={t('settings.template.tooltip.delete')}
                   >
                     <TrashIcon className="w-3.5 h-3.5" />
                   </button>
@@ -394,7 +410,7 @@ export function SettingsPanel() {
                     setNewName('')
                   }
                 }}
-                placeholder="Template name..."
+                placeholder={t('settings.template.placeholder.name')}
                 className="flex-1 text-sm bg-surface-200 rounded-lg px-3 py-1.5 outline-none border border-border-subtle focus:border-accent text-text-primary placeholder:text-text-tertiary"
               />
               <button
@@ -402,7 +418,7 @@ export function SettingsPanel() {
                 disabled={!newName.trim()}
                 className="text-sm px-3 py-1.5 rounded-lg bg-accent text-white hover:opacity-90 disabled:opacity-40 transition-opacity"
               >
-                Save
+                {t('settings.template.button.save')}
               </button>
             </div>
           ) : (
@@ -412,7 +428,7 @@ export function SettingsPanel() {
               className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <PlusIcon className="w-4 h-4" />
-              Save current layout
+              {t('settings.template.button.saveLayout')}
             </button>
           )}
         </section>
@@ -425,7 +441,7 @@ export function SettingsPanel() {
   )
 }
 
-function WorkspacesSection() {
+function WorkspacesSection({ t }: { t: (key: string, options?: Record<string, unknown>) => string }) {
   const workspaces = useWorkspaceStore((s) => s.workspaces)
   const activeWorkspaceId = useWorkspaceStore((s) => s.activeWorkspaceId)
   const addWorkspace = useWorkspaceStore((s) => s.addWorkspace)
@@ -451,7 +467,7 @@ function WorkspacesSection() {
       // Legacy fallback: try direct workspace.clave
       const added = await addWorkspace(folder)
       if (!added) {
-        setDiscoveryError('No .clave files found in this folder.')
+        setDiscoveryError(t('settings.workspaces.error.notFound'))
         setTimeout(() => setDiscoveryError(null), 3000)
       }
       return
@@ -461,7 +477,7 @@ function WorkspacesSection() {
       // Single file — auto-add
       const added = await addWorkspaceFiles(files)
       if (!added) {
-        setDiscoveryError('Workspace already registered.')
+        setDiscoveryError(t('settings.workspaces.error.alreadyRegistered'))
         setTimeout(() => setDiscoveryError(null), 3000)
       }
       return
@@ -502,11 +518,10 @@ function WorkspacesSection() {
   return (
     <section className="mt-8">
       <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-widest mb-3">
-        Workspaces
+        {t('settings.section.workspaces')}
       </h3>
       <p className="text-[11px] text-text-tertiary mb-3">
-        Select a folder to discover <code className="text-text-secondary">.clave</code> workspace files.
-        The active workspace auto-loads its groups as pins.
+        {t('settings.workspaces.description')}
       </p>
       <div className="space-y-1.5">
         {workspaces.map((ws) => {
@@ -547,7 +562,7 @@ function WorkspacesSection() {
       {discoveredFiles && (
         <div className="mt-2 p-3 rounded-lg border border-accent/30 bg-accent/5">
           <p className="text-[11px] text-text-secondary mb-2 font-medium">
-            Found {discoveredFiles.length} workspace files:
+            {t('settings.workspaces.discovery.found', { count: discoveredFiles.length })}
           </p>
           <div className="space-y-1">
             {discoveredFiles.map((file) => {
@@ -573,7 +588,7 @@ function WorkspacesSection() {
                   />
                   <span className="text-[12px] text-text-primary font-medium">{file.name}</span>
                   {alreadyRegistered && (
-                    <span className="text-[10px] text-text-tertiary">(already added)</span>
+                    <span className="text-[10px] text-text-tertiary">{t('settings.workspaces.discovery.alreadyAdded')}</span>
                   )}
                 </label>
               )
@@ -585,13 +600,13 @@ function WorkspacesSection() {
               disabled={selectedFiles.size === 0}
               className="flex-1 px-3 py-1.5 rounded-md bg-accent text-white text-[11px] font-medium hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-default"
             >
-              Add Selected
+              {t('settings.workspaces.button.addSelected')}
             </button>
             <button
               onClick={handleCancelDiscovery}
               className="px-3 py-1.5 rounded-md border border-border-subtle text-text-tertiary text-[11px] font-medium hover:bg-surface-200 transition-colors"
             >
-              Cancel
+              {t('settings.workspaces.button.cancel')}
             </button>
           </div>
         </div>
@@ -607,7 +622,7 @@ function WorkspacesSection() {
         className="mt-2 flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-border-subtle text-text-tertiary hover:text-text-secondary hover:border-border hover:bg-surface-100 transition-all text-[12px] font-medium w-full justify-center"
       >
         <PlusIcon className="w-3.5 h-3.5" />
-        Add Workspace
+        {t('settings.workspaces.button.add')}
       </button>
     </section>
   )

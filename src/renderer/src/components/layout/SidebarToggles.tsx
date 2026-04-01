@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 import { ShieldExclamationIcon } from '@heroicons/react/24/outline'
 import { IconButton } from '../ui/tooltip'
 
 export function ClaudeToggle({ compact }: { compact?: boolean }) {
+  const { t } = useTranslation()
   const claudeMode = useSessionStore((s) => s.claudeMode)
   const toggleClaudeMode = useSessionStore((s) => s.toggleClaudeMode)
 
@@ -20,7 +22,7 @@ export function ClaudeToggle({ compact }: { compact?: boolean }) {
             : 'var(--claude-toggle-bg)',
           boxShadow: claudeMode ? 'inset 0 0 12px var(--claude-toggle-glow)' : 'none'
         }}
-        tooltip={claudeMode ? 'Claude Code mode' : 'Terminal mode'}
+        tooltip={claudeMode ? t('sidebar.toggle.claudeCodeMode') : t('sidebar.toggle.terminalMode')}
       >
         <svg
           width={compact ? 12 : 14}
@@ -42,6 +44,7 @@ export function ClaudeToggle({ compact }: { compact?: boolean }) {
 }
 
 export function DangerousToggle({ compact }: { compact?: boolean }) {
+  const { t } = useTranslation()
   const dangerousMode = useSessionStore((s) => s.dangerousMode)
   const toggleDangerousMode = useSessionStore((s) => s.toggleDangerousMode)
 
@@ -59,7 +62,7 @@ export function DangerousToggle({ compact }: { compact?: boolean }) {
             : 'var(--danger-toggle-bg)',
           boxShadow: dangerousMode ? 'inset 0 0 12px var(--danger-toggle-glow)' : 'none'
         }}
-        tooltip={dangerousMode ? 'Skip permissions ON' : 'Skip permissions OFF'}
+        tooltip={dangerousMode ? t('sidebar.toggle.skipPermissionsOn') : t('sidebar.toggle.skipPermissionsOff')}
       >
         <ShieldExclamationIcon
           className={compact ? 'w-3.5 h-3.5' : 'w-4 h-4'}

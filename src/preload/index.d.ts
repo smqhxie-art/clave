@@ -383,6 +383,9 @@ export interface ElectronAPI {
   readImageAsDataUrl: (absolutePath: string) => Promise<string | null>
   preferencesGet: (key: string) => Promise<unknown>
   preferencesSet: (key: string, value: unknown) => Promise<void>
+
+  // Menu language
+  setMenuLanguage: (lang: string) => void
 }
 
 declare global {

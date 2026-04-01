@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { MarkdownRenderer } from '../files/MarkdownRenderer'
 import { cn } from '../../lib/utils'
 import type { ChatMessage as ChatMessageType } from '../../../../shared/remote-types'
@@ -7,6 +8,7 @@ interface ChatMessageProps {
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
+  const { t } = useTranslation()
   const isUser = message.role === 'user'
   const isSystem = message.role === 'system'
 
@@ -41,7 +43,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <span className="inline-block w-1.5 h-4 bg-current opacity-60 animate-pulse ml-0.5 align-text-bottom" />
         )}
         {message.status === 'error' && (
-          <span className="text-xs text-red-400 mt-1 block">Failed to send</span>
+          <span className="text-xs text-red-400 mt-1 block">{t('agent.chat.message.error.sendFailed')}</span>
         )}
       </div>
     </div>

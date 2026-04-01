@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAgentStore } from '../../store/agent-store'
 import { useLocationStore } from '../../store/location-store'
 import { useSessionStore } from '../../store/session-store'
@@ -18,6 +19,7 @@ interface AgentPickerPopoverProps {
 }
 
 export function AgentPickerPopover({ anchorRef, onClose }: AgentPickerPopoverProps) {
+  const { t } = useTranslation()
   const agents = useAgentStore((s) => s.agents)
   const locations = useLocationStore((s) => s.locations)
   const sessions = useSessionStore((s) => s.sessions)
@@ -77,7 +79,7 @@ export function AgentPickerPopover({ anchorRef, onClose }: AgentPickerPopoverPro
   const seenLocationNames = new Map<string, number>()
   for (const [locationId, locationAgents] of agentsByLocation) {
     const location = locations.find((l) => l.id === locationId)
-    const name = location?.name ?? 'Unknown'
+    const name = location?.name ?? t('agent.picker.unknownLocation')
     const existingIdx = seenLocationNames.get(name)
     if (existingIdx !== undefined) {
       // Merge into existing group, skip agents already added
@@ -104,9 +106,9 @@ export function AgentPickerPopover({ anchorRef, onClose }: AgentPickerPopoverPro
         }}
       >
         <p className="text-[13px] text-text-tertiary text-center">
-          No connected locations have agents.
+          {t('agent.picker.emptyState.noAgents')}
           <br />
-          Connect a location in Settings.
+          {t('agent.picker.emptyState.connectHint')}
         </p>
       </div>
     )
@@ -146,7 +148,7 @@ export function AgentPickerPopover({ anchorRef, onClose }: AgentPickerPopoverPro
                   {inSidebar ? (
                     <CheckIcon className="w-3.5 h-3.5 text-accent flex-shrink-0" />
                   ) : (
-                    <span className="text-[11px] text-text-tertiary flex-shrink-0">Add</span>
+                    <span className="text-[11px] text-text-tertiary flex-shrink-0">{t('agent.picker.button.addAgent')}</span>
                   )}
                 </button>
               )

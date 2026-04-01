@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../store/session-store'
 import type { GitLogEntry, GitCommitFileStatus } from '../../../../preload/index.d'
 
@@ -6,22 +7,22 @@ import type { GitLogEntry, GitCommitFileStatus } from '../../../../preload/index
 // Helpers
 // ---------------------------------------------------------------------------
 
-function relativeTime(isoDate: string): string {
+function relativeTime(isoDate: string, t: (key: string, options?: any) => string): string {
   const now = Date.now()
   const then = new Date(isoDate).getTime()
   const diff = now - then
   const seconds = Math.floor(diff / 1000)
-  if (seconds < 60) return 'just now'
+  if (seconds < 60) return t('git.time.justNow')
   const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 60) return t('git.time.minutesAgo', { minutes })
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return t('git.time.hoursAgo', { hours })
   const days = Math.floor(hours / 24)
-  if (days < 30) return `${days}d ago`
+  if (days < 30) return t('git.time.daysAgo', { days })
   const months = Math.floor(days / 30)
-  if (months < 12) return `${months}mo ago`
+  if (months < 12) return t('git.time.monthsAgo', { months })
   const years = Math.floor(months / 12)
-  return `${years}y ago`
+  return t('git.time.yearsAgo', { years })
 }
 
 function commitFileStatusLetter(status: GitCommitFileStatus['status']): string {
@@ -60,6 +61,7 @@ function CommitDetail({
   onSelectFile: (file: GitCommitFileStatus, allFiles: GitCommitFileStatus[], clickY: number) => void
   onClose: () => void
 }) {
+  const { t } = useTranslation()
   const [files, setFiles] = useState<GitCommitFileStatus[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -89,7 +91,7 @@ function CommitDetail({
         <p className="text-xs text-text-primary whitespace-pre-wrap break-words">{commit.message}</p>
         <div className="text-[10px] text-text-tertiary flex items-center gap-2">
           <span>{commit.author}</span>
-          <span>{relativeTime(commit.date)}</span>
+          <span>{relativeTime(commit.date, t)}</span>
           <button
             className="ml-auto text-text-tertiary hover:text-text-primary transition-colors"
             onClick={onClose}
@@ -108,9 +110,9 @@ function CommitDetail({
 
       {/* Changed files */}
       {loading ? (
-        <div className="px-3 py-2 text-[10px] text-text-tertiary">Loading files...</div>
+        <div className="px-3 py-2 text-[10px] text-text-tertiary">{t('git.log.loadingFiles')}</div>
       ) : files.length === 0 ? (
-        <div className="px-3 py-2 text-[10px] text-text-tertiary">No files changed</div>
+        <div className="px-3 py-2 text-[10px] text-text-tertiary">{t('git.log.noFilesChanged')}</div>
       ) : (
         <div className="pb-1">
           {files.map((file) => {
@@ -171,6 +173,7 @@ function CommitRow({
   onClick: () => void
   variant?: 'outgoing' | 'incoming' | 'normal'
 }) {
+  const { t } = useTranslation()
   // Subtle left border for outgoing/incoming commits
   const borderClass =
     variant === 'outgoing'
@@ -191,7 +194,7 @@ function CommitRow({
       </span>
       <span className="text-text-primary truncate flex-1" title={commit.message}>{commit.message}</span>
       <span className="text-[10px] text-text-tertiary flex-shrink-0 whitespace-nowrap">
-        {relativeTime(commit.date)}
+        {relativeTime(commit.date, t)}
       </span>
     </div>
   )
@@ -268,6 +271,7 @@ export function GitLogView({
   ahead: number
   behind: number
 }) {
+  const { t } = useTranslation()
   const setDiffPreview = useSessionStore((s) => s.setDiffPreview)
   const [outgoing, setOutgoing] = useState<GitLogEntry[]>([])
   const [incoming, setIncoming] = useState<GitLogEntry[]>([])
@@ -359,7 +363,7 @@ export function GitLogView({
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <span className="text-xs text-text-tertiary">Loading history...</span>
+        <span className="text-xs text-text-tertiary">{t('git.log.loadingHistory')}</span>
       </div>
     )
   }
@@ -381,10 +385,10 @@ export function GitLogView({
         {hasOutgoing && (
           <>
             <LogSectionHeader
-              label="Outgoing"
+              label={t('git.log.section.outgoing')}
               count={outgoing.length}
               color="text-green-400"
-              action={`\u2191 Push`}
+              action={t('git.log.action.push')}
               onAction={handlePush}
               actionDisabled={operating}
             />
@@ -417,10 +421,10 @@ export function GitLogView({
           <>
             {hasOutgoing && <SyncDivider label={`origin/${branch}`} />}
             <LogSectionHeader
-              label="Incoming"
+              label={t('git.log.section.incoming')}
               count={incoming.length}
               color="text-orange-400"
-              action={`\u2193 Pull`}
+              action={t('git.log.action.pull')}
               onAction={handlePull}
               actionDisabled={operating}
             />
@@ -449,7 +453,7 @@ export function GitLogView({
         )}
 
         {/* Synced history */}
-        {hasSections && <SyncDivider label="history" />}
+        {hasSections && <SyncDivider label={t('git.log.section.history')} />}
         {history.map((commit) => (
           <div key={commit.hash}>
             <CommitRow
@@ -474,7 +478,7 @@ export function GitLogView({
 
         {!hasOutgoing && !hasIncoming && history.length === 0 && (
           <div className="flex-1 flex items-center justify-center py-8">
-            <span className="text-xs text-text-tertiary">No commit history</span>
+            <span className="text-xs text-text-tertiary">{t('git.log.noHistory')}</span>
           </div>
         )}
       </div>
