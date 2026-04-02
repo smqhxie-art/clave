@@ -111,11 +111,16 @@ export function HistoryPanel() {
     const target = messageRefs.current[targetMessageId]
     if (!target) return
 
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const rafId = requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: 'instant', block: 'center' })
+    })
     const timer = window.setTimeout(() => {
       clearTargetMessage()
     }, 1800)
-    return () => window.clearTimeout(timer)
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.clearTimeout(timer)
+    }
   }, [targetMessageId, clearTargetMessage, messages])
 
   const restoreSession = async () => {
