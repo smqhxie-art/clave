@@ -35,5 +35,8 @@ temp_trash/
 .env
 .certificates*
 
+# Local electron-builder overrides (ad-hoc signing etc)
+electron-builder.local.yml
+
 # ── Entire ───────────────────────────────────────────────────
 .entire/
