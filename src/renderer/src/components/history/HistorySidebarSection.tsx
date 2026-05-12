@@ -71,6 +71,8 @@ export function HistorySidebarSection() {
   const searchMessages = useHistoryStore((s) => s.searchMessages)
   const clearSearch = useHistoryStore((s) => s.clearSearch)
   const openSearchResult = useHistoryStore((s) => s.openSearchResult)
+  const isIndexing = useHistoryStore((s) => s.isIndexing)
+  const indexProgress = useHistoryStore((s) => s.indexProgress)
   const activeView = useSessionStore((s) => s.activeView)
   const setActiveView = useSessionStore((s) => s.setActiveView)
   const globalSearchQuery = useSessionStore((s) => s.searchQuery)
@@ -284,7 +286,37 @@ export function HistorySidebarSection() {
                 </div>
               </div>
             ) : isSearchMode ? (
-              isSearching ? (
+              isIndexing ? (
+                <div className="px-2.5 py-2 text-xs text-text-tertiary">
+                  <div className="flex items-center gap-2">
+                    <ArrowPathIcon className="w-3.5 h-3.5 animate-spin text-text-tertiary" />
+                    <span>
+                      Building search index
+                      {indexProgress && indexProgress.total > 0
+                        ? ` ${indexProgress.processed}/${indexProgress.total}`
+                        : '…'}
+                    </span>
+                  </div>
+                  {indexProgress && indexProgress.total > 0 && (
+                    <div className="mt-2 h-1 w-full rounded bg-surface-200 overflow-hidden">
+                      <div
+                        className="h-full bg-accent transition-[width] duration-150"
+                        style={{
+                          width: `${Math.min(
+                            100,
+                            Math.round(
+                              (indexProgress.processed / Math.max(1, indexProgress.total)) * 100
+                            )
+                          )}%`
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div className="mt-1.5 text-[11px] text-text-tertiary">
+                    First-time indexing can take a few seconds. Subsequent searches are instant.
+                  </div>
+                </div>
+              ) : isSearching ? (
                 <div className="px-2.5 py-2 text-xs text-text-tertiary">Searching messages...</div>
               ) : groupedSearchResults.length === 0 ? (
                 <div className="px-2.5 py-2 text-xs text-text-tertiary">No matching conversation text.</div>

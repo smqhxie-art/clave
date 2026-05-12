@@ -2,8 +2,17 @@ import { create } from 'zustand'
 import { useSessionStore } from './session-store'
 
 let latestHistorySearchRequest = 0
+let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null
+const SEARCH_DEBOUNCE_MS = 200
 
 export type HistoryRoleFilter = 'all' | 'user' | 'assistant'
+
+export interface HistoryIndexProgress {
+  processed: number
+  total: number
+  currentFile: string | null
+  phase: 'scanning' | 'indexing' | 'done'
+}
 
 export interface HistoryProject {
   id: string
@@ -65,6 +74,8 @@ interface HistoryState {
   searchRoleFilter: HistoryRoleFilter
   searchResults: HistorySearchResult[]
   targetMessageId: string | null
+  isIndexing: boolean
+  indexProgress: HistoryIndexProgress | null
   refresh: () => Promise<void>
   loadProjectSessions: (projectId: string) => Promise<HistorySession[]>
   selectSession: (session: HistorySession, options?: { targetMessageId?: string | null; skipViewSwitch?: boolean }) => Promise<void>
@@ -75,6 +86,8 @@ interface HistoryState {
   clearSearch: () => void
   clearTargetMessage: () => void
   clearSelectedSession: () => void
+  ensureHistoryIndex: () => Promise<void>
+  setIndexProgress: (progress: HistoryIndexProgress | null) => void
 }
 
 function findSessionBySourcePath(
@@ -102,6 +115,8 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   searchRoleFilter: 'all',
   searchResults: [],
   targetMessageId: null,
+  isIndexing: false,
+  indexProgress: null,
 
   refresh: async () => {
     set({ isLoadingProjects: true })
@@ -189,36 +204,72 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   searchMessages: async (query, roleFilter) => {
     const nextRoleFilter = roleFilter ?? get().searchRoleFilter
     const trimmed = query.trim()
-    const requestId = ++latestHistorySearchRequest
     set({
       searchQuery: query,
       searchRoleFilter: nextRoleFilter
     })
 
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer)
+      searchDebounceTimer = null
+    }
+
     if (!trimmed) {
-      set({
-        isSearching: false,
-        searchResults: []
-      })
+      latestHistorySearchRequest += 1
+      set({ isSearching: false, searchResults: [] })
       return
     }
 
+    // Show the spinner right away so the UI doesn't feel dead during the debounce window.
     set({ isSearching: true })
+
+    return new Promise<void>((resolve) => {
+      searchDebounceTimer = setTimeout(async () => {
+        searchDebounceTimer = null
+        const requestId = ++latestHistorySearchRequest
+        try {
+          // Make sure the index is ready before searching; ensureHistoryIndex is a no-op
+          // once the index is warm, so this is cheap on every call after the first.
+          await window.electronAPI.historyEnsureIndex()
+          if (requestId !== latestHistorySearchRequest) {
+            resolve()
+            return
+          }
+          const searchResults = await window.electronAPI.historySearch(trimmed, nextRoleFilter)
+          if (requestId !== latestHistorySearchRequest) {
+            resolve()
+            return
+          }
+          set({ searchResults, isSearching: false })
+        } catch (error) {
+          console.error('Failed to search Claude history:', error)
+          if (requestId === latestHistorySearchRequest) {
+            set({ searchResults: [], isSearching: false })
+          }
+        } finally {
+          resolve()
+        }
+      }, SEARCH_DEBOUNCE_MS)
+    })
+  },
+
+  ensureHistoryIndex: async () => {
     try {
-      const searchResults = await window.electronAPI.historySearch(trimmed, nextRoleFilter)
-      if (requestId !== latestHistorySearchRequest) return
-      set({
-        searchResults,
-        isSearching: false
-      })
+      await window.electronAPI.historyEnsureIndex()
     } catch (error) {
-      console.error('Failed to search Claude history:', error)
-      if (requestId !== latestHistorySearchRequest) return
-      set({
-        searchResults: [],
-        isSearching: false
-      })
+      console.error('Failed to ensure Claude history index:', error)
     }
+  },
+
+  setIndexProgress: (progress) => {
+    if (progress === null) {
+      set({ indexProgress: null, isIndexing: false })
+      return
+    }
+    set({
+      indexProgress: progress,
+      isIndexing: progress.phase !== 'done'
+    })
   },
 
   openSearchResult: async (result) => {
@@ -232,13 +283,18 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
     await get().selectSession(session, { targetMessageId: result.messageId })
   },
 
-  clearSearch: () =>
-    ((latestHistorySearchRequest += 1),
+  clearSearch: () => {
+    latestHistorySearchRequest += 1
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer)
+      searchDebounceTimer = null
+    }
     set({
       searchQuery: '',
       searchResults: [],
       isSearching: false
-    })),
+    })
+  },
 
   clearTargetMessage: () => set({ targetMessageId: null }),
 
@@ -250,3 +306,10 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
       messages: []
     })
 }))
+
+// Subscribe once to index progress events from the main process.
+if (typeof window !== 'undefined' && window.electronAPI?.onHistoryIndexProgress) {
+  window.electronAPI.onHistoryIndexProgress((progress) => {
+    useHistoryStore.getState().setIndexProgress(progress.phase === 'done' ? null : progress)
+  })
+}

@@ -18,6 +18,7 @@ import { GroupCommandDialog } from '../ui/GroupCommandDialog'
 import { ExportClaveDialog } from '../ui/ExportClaveDialog'
 import { cn } from '../../lib/utils'
 import { SectionHeading, TaskQueueSection, HistorySection, JournalSection } from './SidebarSections'
+import { HistorySidebarSection } from '../history/HistorySidebarSection'
 import { WhatsNewBanner } from '../help/WhatsNewBanner'
 import { NewSessionDropdown } from './NewSessionDropdown'
 import { RemoteDirectoryPicker } from '../ui/RemoteDirectoryPicker'
@@ -1026,7 +1027,7 @@ export function Sidebar() {
             ref={searchInputRef}
             data-sidebar-search
             type="text"
-            placeholder=""
+            placeholder="Search sessions & Claude history…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -1316,6 +1317,7 @@ export function Sidebar() {
         <SectionHeading title="Activity" collapsed={boardCollapsed} onToggle={() => setBoardCollapsed((c) => !c)} />
         <TaskQueueSection collapsed={boardCollapsed} />
         <HistorySection collapsed={boardCollapsed} />
+        {isSearchMode && <HistorySidebarSection />}
         <JournalSection collapsed={boardCollapsed} />
       </ScrollArea>
 

@@ -357,6 +357,15 @@ export interface ElectronAPI {
   historyLoadSessions: (projectId: string) => Promise<ClaudeHistorySession[]>
   historyLoadMessages: (sourcePath: string) => Promise<ClaudeHistoryMessage[]>
   historySearch: (query: string, roleFilter?: 'all' | 'user' | 'assistant') => Promise<ClaudeHistorySearchResult[]>
+  historyEnsureIndex: () => Promise<void>
+  onHistoryIndexProgress: (
+    callback: (progress: {
+      processed: number
+      total: number
+      currentFile: string | null
+      phase: 'scanning' | 'indexing' | 'done'
+    }) => void
+  ) => () => void
   openExternal: (url: string) => Promise<void>
   checkPort: (port: number) => Promise<boolean>
   openPath: (filePath: string) => Promise<string>

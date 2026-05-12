@@ -67,6 +67,25 @@ const electronAPI = {
     ipcRenderer.invoke('claude-history:load-messages', sourcePath),
   historySearch: (query: string, roleFilter: 'all' | 'user' | 'assistant' = 'all') =>
     ipcRenderer.invoke('claude-history:search', query, roleFilter),
+  historyEnsureIndex: () => ipcRenderer.invoke('claude-history:ensure-index'),
+  onHistoryIndexProgress: (
+    callback: (progress: {
+      processed: number
+      total: number
+      currentFile: string | null
+      phase: 'scanning' | 'indexing' | 'done'
+    }) => void
+  ) =>
+    createIpcListener<
+      [
+        {
+          processed: number
+          total: number
+          currentFile: string | null
+          phase: 'scanning' | 'indexing' | 'done'
+        }
+      ]
+    >('claude-history:index-progress', callback),
 
   openExternal: (url: string) => ipcRenderer.invoke('shell:openExternal', url),
   checkPort: (port: number) =>

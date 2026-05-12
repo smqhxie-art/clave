@@ -8,6 +8,7 @@ import {
   searchClaudeHistoryMessages,
   type ClaudeHistoryRoleFilter
 } from '../claude-history'
+import { ensureHistoryIndex } from '../claude-history-index'
 
 function assertInsideProjectsRoot(inputPath: string): void {
   const resolved = path.resolve(inputPath)
@@ -37,4 +38,8 @@ export function registerClaudeHistoryHandlers(): void {
       return searchClaudeHistoryMessages(query, roleFilter)
     }
   )
+
+  ipcMain.handle('claude-history:ensure-index', async () => {
+    await ensureHistoryIndex()
+  })
 }

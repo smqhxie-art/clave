@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { ArrowPathIcon, PlayIcon, ShieldExclamationIcon } from '@heroicons/react/24/outline'
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem
-} from '../ui/dropdown-menu'
+import { ArrowPathIcon, PlayIcon } from '@heroicons/react/24/outline'
 import { cn } from '../../lib/utils'
 import { MarkdownRenderer } from '../files/MarkdownRenderer'
 import { useHistoryStore } from '../../store/history-store'
@@ -174,8 +168,6 @@ export function HistoryPanel() {
       window.clearTimeout(timer)
     }
   }, [targetMessageId, clearTargetMessage, messages])
-
-  const [resumeMenuOpen, setResumeMenuOpen] = useState(false)
 
   const restoreSession = async (dangerousMode: boolean = false) => {
     if (!selectedSession) return
@@ -349,24 +341,15 @@ export function HistoryPanel() {
           >
             <ArrowPathIcon className="w-3.5 h-3.5" />
           </button>
-          <DropdownMenu open={resumeMenuOpen} onOpenChange={setResumeMenuOpen}>
-            <DropdownMenuTrigger asChild>
-              <button type="button" className="btn-primary">
-                <PlayIcon className="w-3 h-3" />
-                Resume
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent animated open={resumeMenuOpen} align="end">
-              <DropdownMenuItem onSelect={() => restoreSession(false)}>
-                <PlayIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-                <span className="flex-1">Resume</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => restoreSession(true)}>
-                <ShieldExclamationIcon className="w-3.5 h-3.5 flex-shrink-0 text-text-tertiary" />
-                <span className="flex-1">Resume (skip permissions)</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => restoreSession(true)}
+            title="Resume (skip permissions)"
+          >
+            <PlayIcon className="w-3 h-3" />
+            Resume
+          </button>
         </div>
       </div>
 

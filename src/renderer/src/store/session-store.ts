@@ -233,7 +233,7 @@ export const useSessionStore = create<SessionState>((set) => ({
   diffPreview: null,
   gitRefreshTrigger: 0,
   collapseAllTrigger: 0,
-  activeView: 'terminals' as ActiveView,
+  activeView: 'history' as ActiveView,
   sidePanelTab: 'files' as const,
   gitViewMode: (localStorage.getItem('clave-git-view-mode') === 'tree' ? 'tree' : 'list') as 'list' | 'tree',
   gitPanelMode: 'changes' as const,

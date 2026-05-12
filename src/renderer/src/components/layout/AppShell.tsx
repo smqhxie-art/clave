@@ -219,11 +219,6 @@ export function AppShell() {
         e.preventDefault()
         spawnSessionWithOptions(true, true)
       }
-      // Cmd+I: New Gemini CLI session
-      if (e.metaKey && !e.shiftKey && !e.altKey && e.key === 'i') {
-        e.preventDefault()
-        spawnSessionWithOptions(false, false, true)
-      }
       // Cmd+W: Close focused file tab
       if (e.metaKey && e.key === 'w') {
         const sid = useSessionStore.getState().focusedSessionId
